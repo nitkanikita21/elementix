@@ -21,12 +21,19 @@ kotlin {
         }
     }
     sourceSets {
-        val commonMain by getting
-        /*val jsMain by getting {
+        val commonMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-emotion:11.9.3-pre.346")
-                implementation("org.jetbrains.kotlinx:kotlinx-html:0.8.1")
             }
-        }*/
+        }
+        val jsMain by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-html-js:0.9.1")
+            }
+        }
+        val jsTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
     }
 }
