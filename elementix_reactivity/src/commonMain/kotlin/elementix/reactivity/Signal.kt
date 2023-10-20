@@ -1,9 +1,10 @@
 package elementix.reactivity
 
-class Signal<T>(
+class Signal<T> internal constructor(
     private val context: Context,
     private val id: SignalId
 ) {
+
     fun get(): T {
         val value = context.signalValues[id.value] as T
 

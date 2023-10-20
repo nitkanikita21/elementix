@@ -1,4 +1,6 @@
 import elementix.reactivity.Context
+import elementix.reactivity.Memo
+import elementix.reactivity.Signal
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -14,7 +16,7 @@ class Test {
 
 
     @Test
-    fun test() {
+    fun testSignalAndEffects() {
         val signal = Context.createSignal(0)
 
         val buttonPlus = Button().apply {
@@ -69,7 +71,7 @@ class Test {
     }
 
     @Test
-    fun test2() {
+    fun testDerivedSignals() {
         val count = Context.createSignal(0)
         val double = {
             count.get() * 2
@@ -141,7 +143,7 @@ class Test {
     }
 
     @Test
-    fun test3() {
+    fun testFlowControl() {
         val showFullName = Context.createSignal(true)
         val firstName = Context.createSignal("Nitka")
         val lastName = Context.createSignal("Nikita")
@@ -174,5 +176,43 @@ class Test {
         assertEquals("Nitka Nikita", paragraph.text)
         assertEquals(2, renderedFull)
         assertEquals(1, renderedFirst)
+    }
+
+    @Test
+    fun testMemos() {
+        val width = Context.createSignal(5)
+        val height = Context.createSignal(10)
+        val area: Memo<Int> = Context.createMemo {
+            width.get() * height.get()
+        }
+
+        var notifications = 0
+        Context.createEffect {
+            println(area())
+            notifications++
+        }
+
+        assertEquals(50, area())
+        assertEquals(1, notifications)
+
+        width(5)
+        assertEquals(50, area())
+        assertEquals(1, notifications)
+
+        height(10)
+        assertEquals(50, area())
+        assertEquals(1, notifications)
+
+        width(3)
+        assertEquals(30, area())
+        assertEquals(2, notifications)
+
+        height(5)
+        assertEquals(15, area())
+        assertEquals(3, notifications)
+
+        height(5)
+        assertEquals(15, area())
+        assertEquals(3, notifications)
     }
 }
