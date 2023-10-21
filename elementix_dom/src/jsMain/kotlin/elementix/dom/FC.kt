@@ -9,9 +9,7 @@ class FC<P : Any>(
 ) {
     operator fun invoke(props: P): ComponentAppender<*> {
         return {
-            val element = view(it, props)
-
-
+            view(it, props)
         }
     }
 }

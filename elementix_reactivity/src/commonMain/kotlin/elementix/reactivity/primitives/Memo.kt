@@ -1,42 +1,44 @@
-package elementix.reactivity
+package elementix.reactivity.primitives
+
+import elementix.reactivity.Context
+import elementix.reactivity.MemoComputation
+import elementix.reactivity.SignalId
 
 class Memo<T> internal constructor(
-    private val context: Context,
+    private val cx: Context,
     private val computation: MemoComputation<T>
-) {
+): ReadSignal<T> {
     private var prevValue: T? = null
     private lateinit var id: SignalId
 
     init {
-        context.createEffect {
+        cx.createEffect {
             //context.memoValues[id.value] = computation(prevValue)
             val newValue = computation(prevValue)
             if (newValue != prevValue) {
                 if (!(::id.isInitialized)) {
-                    context.signalValues.add(newValue as Any)
-                    id = SignalId(context.signalValues.size - 1)
+                    id = cx.nextSignalId()
                 } else {
-                    context.signalValues[id.value] = newValue as Any
-                    context.signalSubscribers[id]?.forEach(context::runEffect)
+                    cx.signalSubscribers[id]?.forEach(cx::runEffect)
                 }
+                cx.signalValues[id] = newValue as Any
                 prevValue = newValue
             }
         }
     }
 
-    fun get(): T {
-        val value = context.signalValues[id.value] as T
+    @Suppress("UNCHECKED_CAST")
+    override fun get(): T {
+        val value = cx.signalValues[id] as T
 
-        context.runningEffect?.let { effectId ->
-            context.signalSubscribers
+        cx.runningEffect?.let { effectId ->
+            cx.signalSubscribers
                 .getOrPut(id) { hashSetOf() }
                 .add(effectId)
         }
 
         return value
     }
-
-    operator fun invoke() = get()
 
 
 }

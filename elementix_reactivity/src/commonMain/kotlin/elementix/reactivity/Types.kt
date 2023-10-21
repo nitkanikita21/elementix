@@ -1,7 +1,14 @@
 package elementix.reactivity
 
-data class EffectId internal constructor(internal val value: Int)
-data class SignalId internal constructor(internal val value: Int)
+import kotlin.random.Random
+
+sealed interface Id {
+    val value: Int
+}
+
+data class EffectId internal constructor(override val value: Int): Id
+data class SignalId internal constructor(override val value: Int): Id
+data class TriggerId internal constructor(override val value: Int): Id
 
 typealias Effect = () -> Unit
 typealias MemoComputation<T> = (T?) -> T

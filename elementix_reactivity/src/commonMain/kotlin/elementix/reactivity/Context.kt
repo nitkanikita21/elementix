@@ -1,29 +1,40 @@
 package elementix.reactivity
 
-object Context {
+import elementix.reactivity.primitives.Memo
+import elementix.reactivity.primitives.Signal
+import elementix.reactivity.primitives.Trigger
+import kotlin.random.Random
 
-    internal val signalValues: MutableList<Any> = arrayListOf()
+class Context {
+    internal val signalValues: MutableMap<SignalId, Any> = hashMapOf()
+    internal var triggerIds: MutableSet<TriggerId> = hashSetOf()
+    internal val effects: MutableMap<EffectId, Effect> = hashMapOf()
 
     internal var runningEffect: EffectId? = null
+
     internal val signalSubscribers: MutableMap<SignalId, MutableSet<EffectId>> = hashMapOf()
-    internal val effects: MutableList<Effect> = arrayListOf()
+    internal val triggerSubscribers: MutableMap<TriggerId, MutableSet<EffectId>> = hashMapOf()
 
     fun <T : Any> createSignal(value: T): Signal<T> {
-        signalValues.add(value)
-        val id = SignalId(signalValues.size - 1)
+        val id = nextSignalId()
+        signalValues.put(id, value)
 
         return Signal(this, id)
     }
 
     fun <T: Any> createMemo(computation: MemoComputation<T>): Memo<T> {
-        return Memo(
-            this, computation
-        )
+        return Memo(this, computation)
+    }
+
+    fun createTrigger(): Trigger {
+        val id = nextTriggerId()
+        triggerIds.add(id)
+        return Trigger(this, id)
     }
 
     fun createEffect(effect: Effect) {
-        effects.add(effect)
-        val id = EffectId(effects.size - 1)
+        val id = nextEffectId()
+        effects[id] = effect
         runEffect(id)
     }
 
@@ -35,7 +46,33 @@ object Context {
             entry.value.remove(runningEffect)
         }
 
-        effects[id.value]()
+        effects[id]?.invoke()
         runningEffect = prevRunningEffect
+    }
+
+    //ids
+
+    private fun nextTriggerId(): TriggerId {
+        var id = TriggerId(Random.nextInt())
+        while (triggerSubscribers.containsKey(id)) {
+            id = TriggerId(Random.nextInt())
+        }
+        return id
+    }
+
+    internal fun nextSignalId(): SignalId {
+        var id = SignalId(Random.nextInt())
+        while (signalValues.containsKey(id)) {
+            id = SignalId(Random.nextInt())
+        }
+        return id
+    }
+
+    private fun nextEffectId(): EffectId {
+        var id = EffectId(Random.nextInt())
+        while (effects.containsKey(id)) {
+            id = EffectId(Random.nextInt())
+        }
+        return id
     }
 }

@@ -12,13 +12,7 @@ repositories {
 kotlin {
     js {
         binaries.executable()
-        browser {
-            commonWebpackConfig {
-                cssSupport {
-                    enabled.set(true)
-                }
-            }
-        }
+        browser {}
     }
     sourceSets {
         val commonMain by getting

@@ -13,21 +13,24 @@ kotlin {
     js {
         binaries.executable()
         browser {
-            commonWebpackConfig {
+            /*commonWebpackConfig {
                 cssSupport {
                     enabled.set(true)
                 }
-            }
+            }*/
         }
     }
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-html:0.9.1")
+                implementation(project(":elementix_reactivity"))
             }
         }
         val jsMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-html-js:0.9.1")
+                implementation(project(":elementix_reactivity"))
             }
         }
         val jsTest by getting {
