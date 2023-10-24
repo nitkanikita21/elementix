@@ -1,11 +1,9 @@
 package elementix.dom.tags
 
-import elementix.dom.NativeComponentConfig
 import elementix.dom.Prop
 import elementix.dom.StaticProp
 import elementix.reactivity.Context
 import elementix.reactivity.primitives.ReadSignal
-import kotlinx.browser.document
 import org.w3c.dom.*
 import org.w3c.dom.clipboard.ClipboardEvent
 import org.w3c.dom.css.CSSStyleDeclaration
