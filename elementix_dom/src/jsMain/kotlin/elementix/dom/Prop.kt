@@ -1,0 +1,23 @@
+package elementix.dom
+
+import elementix.reactivity.primitives.ReadSignal
+
+
+interface Prop<T> {
+    val data: T
+        get() = TODO()
+
+    operator fun invoke() = data
+
+    fun ifNotEquals(other: T, callback: (data: T) -> Unit) {
+        if (other != data) callback(data)
+    }
+}
+
+class StaticProp<T>(override val data: T) : Prop<T>
+class ReactiveProp<T>(private val dataSignal: ReadSignal<T>) : Prop<T> {
+    override val data: T get() = dataSignal()
+}
+
+fun <T> T.asProp() = StaticProp(this)
+fun <T> ReadSignal<T>.toProp() = ReactiveProp(this)

@@ -14,6 +14,7 @@ kotlin {
         binaries.executable()
         browser {}
     }
+    jvm()
     sourceSets {
         val commonMain by getting
         val commonTest by getting {

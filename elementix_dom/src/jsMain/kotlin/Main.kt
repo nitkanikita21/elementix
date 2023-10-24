@@ -1,33 +1,72 @@
-import elementix.dom.FC
-import elementix.dom.injectFC
+
+import elementix.dom.ReactiveProp
+import elementix.dom.StaticProp
+import elementix.dom.asProp
+import elementix.dom.elementBuilder
+import elementix.dom.tags.Button
+import elementix.dom.tags.Div
+import elementix.dom.tags.P
+import elementix.dom.tags.fc.For
 import elementix.reactivity.Context
+import elementix.reactivity.primitives.ReadSignal
+import elementix.reactivity.primitives.toStringSignal
 import kotlinx.browser.document
-import kotlinx.html.body
-import kotlinx.html.button
-import kotlinx.html.div
-import kotlinx.html.dom.append
-import kotlinx.html.dom.create
-import kotlinx.html.js.html
-import kotlinx.html.onClick
+import kotlinx.browser.window
+import kotlin.random.Random
+import kotlin.random.nextUInt
+
+//val cx = Context()
 
 fun main() {
+    val cx = Context()
 
-    console.log("hello world!")
-
-    val testFC = FC<String> { props ->
-        val number = Context.createSignal(0)
-
-        button {
-            Context.createEffect {
-                +("$props $number | ")
-            }
-            onClick + {
-                number(number()+1)
+    var count = cx.createSignal(0)
+    val list = ReadSignal {
+        mutableListOf<Int>().apply {
+            console.log("each")
+            for (i in 0..count.get()){
+                add(count.get())
             }
         }
     }
 
-    document.getElementById("root")?.append {
-        this injectFC testFC("hello")
+
+    document.getElementById("root")!!.elementBuilder {
+        +Button(cx) {
+            props {
+                onClick = StaticProp {
+                    count(count()-1)
+                }
+                innerText = StaticProp("-")
+            }
+        }
+        +P(cx) {
+            props {
+                innerText = ReactiveProp(count.toStringSignal())
+            }
+        }
+        +Button(cx) {
+            props {
+                onClick = StaticProp {
+                    count(count()+1)
+                }
+                innerText = StaticProp("+")
+            }
+        }
+
+        +For<Int>(cx) {
+            each = ReactiveProp(list)
+            generator = { it: Int ->
+                P(cx) {
+                    props { innerText = it.toString().asProp() }
+                }
+            }.asProp()
+        }
+        +P(cx) {
+            props {
+                innerText = "###################################".asProp()
+            }
+        }
     }
+
 }

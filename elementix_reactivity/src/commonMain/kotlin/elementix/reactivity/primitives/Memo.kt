@@ -4,10 +4,10 @@ import elementix.reactivity.Context
 import elementix.reactivity.MemoComputation
 import elementix.reactivity.SignalId
 
-class Memo<T> internal constructor(
+class Memo<T: Comparable<T>> internal constructor(
     private val cx: Context,
     private val computation: MemoComputation<T>
-): ReadSignal<T> {
+): ReadSignal<T>, Disposable {
     private var prevValue: T? = null
     private lateinit var id: SignalId
 
@@ -40,5 +40,9 @@ class Memo<T> internal constructor(
         return value
     }
 
+    override fun destroy() {
+        cx.signalSubscribers.remove(id)
+        cx.signalValues.remove(id)
+    }
 
 }

@@ -22,7 +22,7 @@ class Context {
         return Signal(this, id)
     }
 
-    fun <T: Any> createMemo(computation: MemoComputation<T>): Memo<T> {
+    fun <T: Comparable<T>> createMemo(computation: MemoComputation<T>): Memo<T> {
         return Memo(this, computation)
     }
 

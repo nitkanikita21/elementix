@@ -213,11 +213,11 @@ class ReactivityTests {
 
         assertEquals(1, notifyCount)
 
-        trigger.notify()
+        trigger.fire()
         assertEquals(2, notifyCount)
 
         for (i in 0..<5) {
-            trigger.notify()
+            trigger.fire()
         }
         assertEquals(7, notifyCount)
     }
