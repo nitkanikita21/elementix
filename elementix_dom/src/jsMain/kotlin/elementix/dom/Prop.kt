@@ -21,3 +21,7 @@ class ReactiveProp<T>(private val dataSignal: ReadSignal<T>) : Prop<T> {
 
 fun <T> T.asProp() = StaticProp(this)
 fun <T> ReadSignal<T>.toProp() = ReactiveProp(this)
+
+fun <T, R> ReadSignal<T>.toProp(mapper: (T) -> R) = ReactiveProp {
+    return@ReactiveProp mapper(this())
+}

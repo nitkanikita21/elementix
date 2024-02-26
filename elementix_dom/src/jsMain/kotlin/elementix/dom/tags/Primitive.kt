@@ -1,7 +1,11 @@
 package elementix.dom.tags
 
 import elementix.dom.Prop
+import elementix.dom.Props
 import elementix.dom.StaticProp
+import elementix.dom.asProp
+import elementix.dom.view.Component
+import elementix.dom.view.Container
 import elementix.reactivity.Context
 import elementix.reactivity.primitives.ReadSignal
 import org.w3c.dom.*
@@ -16,8 +20,9 @@ internal interface EffectCreator {
 }
 
 open class DefaultElementProps<E : Element>(
-    protected val element: E
-) : EffectCreator {
+    protected val element: E,
+) : EffectCreator, Props {
+    override var children: Prop<List<Container>> = listOf<Container>().asProp()
 
     //<editor-fold desc="properties">
     open var id: Prop<String> = StaticProp(element.id)

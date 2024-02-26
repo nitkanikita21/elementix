@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 class ReactivityTests {
     @Test
     fun testSignalAndEffects() {
-        val cx = Context()
+        val cx = Context
 
         val count = cx.createSignal(0)
         var paragraph = "not reactive yet"
@@ -54,7 +54,7 @@ class ReactivityTests {
 
     @Test
     fun testDerivedSignals() {
-        val cx = Context()
+        val cx = Context
 
         val count = cx.createSignal(0)
         val doubleCount = {
@@ -116,7 +116,7 @@ class ReactivityTests {
 
     @Test
     fun testFlowControl() {
-        val cx = Context()
+        val cx = Context
 
         val showFullName = cx.createSignal(true)
         val firstName = cx.createSignal("Nitka")
@@ -161,7 +161,7 @@ class ReactivityTests {
 
     @Test
     fun testMemos() {
-        val cx = Context()
+        val cx = Context
 
         val width = cx.createSignal(5)
         val height = cx.createSignal(10)
@@ -201,7 +201,7 @@ class ReactivityTests {
 
     @Test
     fun testTrigger() {
-        val cx = Context()
+        val cx = Context
         var notifyCount = 0
 
         val trigger = cx.createTrigger()
