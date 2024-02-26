@@ -5,23 +5,22 @@ import elementix.reactivity.MemoComputation
 import elementix.reactivity.SignalId
 
 class Memo<T: Comparable<T>> internal constructor(
-    private val cx: Context,
     private val computation: MemoComputation<T>
 ): ReadSignal<T>, Disposable {
     private var prevValue: T? = null
     private lateinit var id: SignalId
 
     init {
-        cx.createEffect {
+        Context.createEffect {
             //context.memoValues[id.value] = computation(prevValue)
             val newValue = computation(prevValue)
             if (newValue != prevValue) {
                 if (!(::id.isInitialized)) {
-                    id = cx.nextSignalId()
+                    id = Context.nextSignalId()
                 } else {
-                    cx.signalSubscribers[id]?.forEach(cx::runEffect)
+                    Context.signalSubscribers[id]?.forEach(Context::runEffect)
                 }
-                cx.signalValues[id] = newValue as Any
+                Context.signalValues[id] = newValue as Any
                 prevValue = newValue
             }
         }
@@ -29,10 +28,10 @@ class Memo<T: Comparable<T>> internal constructor(
 
     @Suppress("UNCHECKED_CAST")
     override fun get(): T {
-        val value = cx.signalValues[id] as T
+        val value = Context.signalValues[id] as T
 
-        cx.runningEffect?.let { effectId ->
-            cx.signalSubscribers
+        Context.runningEffect?.let { effectId ->
+            Context.signalSubscribers
                 .getOrPut(id) { hashSetOf() }
                 .add(effectId)
         }
@@ -41,8 +40,8 @@ class Memo<T: Comparable<T>> internal constructor(
     }
 
     override fun destroy() {
-        cx.signalSubscribers.remove(id)
-        cx.signalValues.remove(id)
+        Context.signalSubscribers.remove(id)
+        Context.signalValues.remove(id)
     }
 
 }

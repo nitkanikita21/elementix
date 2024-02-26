@@ -4,23 +4,22 @@ import elementix.reactivity.Context
 import elementix.reactivity.TriggerId
 
 class Trigger internal constructor(
-    private val cx: Context,
     private val id: TriggerId
 ): Disposable {
     fun subscribe() {
-        cx.runningEffect?.let { effectId ->
-            cx.triggerSubscribers
+        Context.runningEffect?.let { effectId ->
+            Context.triggerSubscribers
                 .getOrPut(id) { hashSetOf() }
                 .add(effectId)
         }
     }
 
     fun fire() {
-        cx.triggerSubscribers[id]?.forEach(cx::runEffect)
+        Context.triggerSubscribers[id]?.forEach(Context::runEffect)
     }
 
     override fun destroy() {
-        cx.triggerSubscribers.remove(id)
-        cx.triggerIds.remove(id)
+        Context.triggerSubscribers.remove(id)
+        Context.triggerIds.remove(id)
     }
 }

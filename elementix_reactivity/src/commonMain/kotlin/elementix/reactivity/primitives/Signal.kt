@@ -4,15 +4,14 @@ import elementix.reactivity.Context
 import elementix.reactivity.SignalId
 
 class Signal<T> internal constructor(
-    private val cx: Context,
     private val id: SignalId
 ): ReadWriteSignal<T>, Disposable {
     @Suppress("UNCHECKED_CAST")
     override fun get(): T {
-        val value = cx.signalValues[id] as T
+        val value = Context.signalValues[id] as T
 
-        cx.runningEffect?.let { effectId ->
-            cx.signalSubscribers
+        Context.runningEffect?.let { effectId ->
+            Context.signalSubscribers
                 .getOrPut(id) { hashSetOf() }
                 .add(effectId)
         }
@@ -21,13 +20,13 @@ class Signal<T> internal constructor(
     }
 
     override fun set(value: T) {
-        cx.signalValues[id] = value as Any
-        cx.signalSubscribers[id]?.forEach(cx::runEffect)
+        Context.signalValues[id] = value as Any
+        Context.signalSubscribers[id]?.forEach(Context::runEffect)
     }
 
     override fun destroy() {
-        cx.signalSubscribers.remove(id)
-        cx.signalValues.remove(id)
+        Context.signalSubscribers.remove(id)
+        Context.signalValues.remove(id)
     }
 
 }

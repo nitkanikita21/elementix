@@ -5,7 +5,7 @@ import elementix.reactivity.primitives.Signal
 import elementix.reactivity.primitives.Trigger
 import kotlin.random.Random
 
-class Context {
+object Context {
     internal val signalValues: MutableMap<SignalId, Any> = hashMapOf()
     internal var triggerIds: MutableSet<TriggerId> = hashSetOf()
     internal val effects: MutableMap<EffectId, Effect> = hashMapOf()
@@ -19,17 +19,17 @@ class Context {
         val id = nextSignalId()
         signalValues.put(id, value)
 
-        return Signal(this, id)
+        return Signal(id)
     }
 
     fun <T: Comparable<T>> createMemo(computation: MemoComputation<T>): Memo<T> {
-        return Memo(this, computation)
+        return Memo(computation)
     }
 
     fun createTrigger(): Trigger {
         val id = nextTriggerId()
         triggerIds.add(id)
-        return Trigger(this, id)
+        return Trigger(id)
     }
 
     fun createEffect(effect: Effect) {
