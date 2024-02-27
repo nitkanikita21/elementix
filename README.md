@@ -9,7 +9,7 @@ This project has several goals:
 
 1. Investigate the operation of modern web libraries for creating HTML-based client applications
 2. Create and show what a library written in Kotlin for Kotlin could look like to create such applications
-3. To present as my thesis in a higher educational institution
+3. To present as my graduate work in a higher educational institution
 
 ## 📝 Proof of concept
 
