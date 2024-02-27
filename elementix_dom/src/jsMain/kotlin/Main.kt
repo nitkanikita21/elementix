@@ -16,8 +16,6 @@ fun main() {
         List(count()) { it }
     }
 
-//    val view = (document.createElement("div") as HTMLDivElement).intoView()
-
     val root: Container = Root()
 
     val clickText = ReadSignal {
