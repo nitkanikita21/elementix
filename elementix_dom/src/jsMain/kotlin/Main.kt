@@ -26,7 +26,7 @@ fun main() {
         props.className("flex flex-col p-6 gap-2 w-1/3")
 
         div {
-            props.id = count.toProp { it.toString() }
+            props.id = count.toProp(Any::toString)
         }
         button {
             props.className("btn")
