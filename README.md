@@ -48,7 +48,7 @@ root.div { // Add div to root component
     }
     div {
         +"TEXT DIV  " // Adds a text node
-        br // Br tag
+        br
         +clickText // Adds a reactive text node that updates values when the signal changes
         +"  END TEXT"
     }

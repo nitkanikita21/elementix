@@ -1,9 +1,9 @@
-package elementix.dom.view
+package elementix.dom.view.components
 
+import elementix.dom.view.View
 import elementix.reactivity.Context
 import elementix.reactivity.primitives.ReadSignal
 import kotlinx.browser.document
-import org.w3c.dom.Element
 import org.w3c.dom.Node
 
 class Text(private val textSignal: ReadSignal<String>): View {

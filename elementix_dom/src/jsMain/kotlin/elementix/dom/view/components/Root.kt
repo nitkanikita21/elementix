@@ -1,7 +1,7 @@
-package elementix.dom.view
+package elementix.dom.view.components
 
-import kotlinx.browser.document
-import org.w3c.dom.Element
+import elementix.dom.view.Container
+import elementix.dom.view.View
 import org.w3c.dom.Node
 
 class Root: Container {

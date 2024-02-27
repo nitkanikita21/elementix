@@ -1,4 +1,4 @@
-package elementix.dom.tags
+package elementix.dom.view.components.primitive
 
 import elementix.dom.asProp
 import elementix.dom.view.Component
@@ -6,14 +6,13 @@ import elementix.dom.view.Container
 import elementix.dom.view.View
 import elementix.reactivity.Context
 import kotlinx.browser.document
-import org.w3c.dom.Element
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.Node
 
 sealed class ElementComponent<E: HTMLElement, P: DefaultElementProps<E>> : Component<P> {
     abstract val element: E
 
-    sealed class ContainerTag(name: String) :
+    sealed class Tag(name: String) :
         ElementComponent<HTMLElement, DefaultHTMLElementProps<HTMLElement>>(),
         Container {
 
@@ -42,11 +41,28 @@ sealed class ElementComponent<E: HTMLElement, P: DefaultElementProps<E>> : Compo
         }
     }
 }
+class Tag<D : View>(private val parent: Container, private val getter: () -> D) {
+    operator fun invoke() {
+        parent.appendChild(getter())
+    }
+}
+class OpenedTag<D : View>(private val parent: Container, private val getter: () -> D) {
+    operator fun invoke(scope: D.() -> Unit = {}) {
+        val element = getter().apply(scope)
+        parent.appendChild(element)
+    }
+}
 
-class Div: ElementComponent.ContainerTag("div")
-class Span: ElementComponent.ContainerTag("span")
-class Button: ElementComponent.ContainerTag("button")
-class H1: ElementComponent.ContainerTag("h1")
 
+class Div: ElementComponent.Tag("div")
+class Span: ElementComponent.Tag("span")
+class Button: ElementComponent.Tag("button")
+class H1: ElementComponent.Tag("h1")
 class Br: ElementComponent.ClosedTag("br")
 
+
+val Container.button: OpenedTag<Button> get() = OpenedTag(this) { Button() }
+val Container.div: OpenedTag<Div> get() = OpenedTag(this) { Div() }
+val Container.span: OpenedTag<Span> get() = OpenedTag(this) { Span() }
+val Container.h1: OpenedTag<H1> get() = OpenedTag(this) { H1() }
+val Container.br: Tag<Br> get() = Tag(this) { Br() }

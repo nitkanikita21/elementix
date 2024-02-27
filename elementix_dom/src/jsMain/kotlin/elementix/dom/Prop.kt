@@ -1,7 +1,11 @@
 package elementix.dom
 
+import elementix.dom.view.View
 import elementix.reactivity.primitives.ReadSignal
 
+interface Props {
+    var children: Prop<List<View>>
+}
 
 interface Prop<T> {
     val data: T

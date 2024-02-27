@@ -1,11 +1,13 @@
-package elementix.dom.view
+package elementix.dom.view.components
 
+import elementix.dom.removeNodesBetweenAnchors
+import elementix.dom.view.Container
+import elementix.dom.view.View
 import elementix.reactivity.Context
 import elementix.reactivity.primitives.ReadSignal
 import kotlinx.browser.document
 import org.w3c.dom.DocumentFragment
 import org.w3c.dom.Node
-import org.w3c.dom.asList
 
 fun <T> Container.viewFor(listSignal: ReadSignal<List<T>>, generator: Container.(index: Int, elem: T) -> Unit) {
     this.appendChild(For(listSignal, generator))
@@ -42,7 +44,7 @@ class For<T>(
                 console.log("first render", fragment)
             } else {
                 fragment = document.createDocumentFragment()
-                removeNodesBetweenAnchors(parent)
+                removeNodesBetweenAnchors(parent, anchorStart, anchorEnd)
                 renderChildren(fragment)
                 parent.insertBefore(fragment, anchorEnd)
                 console.log("rerender")
@@ -58,16 +60,6 @@ class For<T>(
             console.log("rendering $index")
         }
         container.render(parent)
-    }
-
-    private fun removeNodesBetweenAnchors(parent: Node) {
-        val list = parent.childNodes.asList()
-        val indexStart = list.indexOf(anchorStart)
-        val indexEnd = list.indexOf(anchorEnd)
-        list.slice((indexStart + 1)..<indexEnd).forEach {
-            console.log("removing", it)
-            parent.removeChild(it)
-        }
     }
 
 }

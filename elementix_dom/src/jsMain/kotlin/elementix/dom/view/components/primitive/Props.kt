@@ -1,11 +1,9 @@
-package elementix.dom.tags
+package elementix.dom.view.components.primitive
 
 import elementix.dom.Prop
 import elementix.dom.Props
 import elementix.dom.StaticProp
 import elementix.dom.asProp
-import elementix.dom.view.Component
-import elementix.dom.view.Container
 import elementix.dom.view.View
 import elementix.reactivity.Context
 import elementix.reactivity.primitives.ReadSignal
@@ -20,7 +18,7 @@ internal interface EffectCreator {
     fun initEffects(cx: Context)
 }
 
-interface ClassProps {
+interface ClassnameProps {
     var className: Prop<String>
 
     fun className(vararg classes: String) {
@@ -30,7 +28,7 @@ interface ClassProps {
 
 open class DefaultElementProps<E : Element>(
     protected val element: E,
-) : EffectCreator, Props, ClassProps {
+) : EffectCreator, Props, ClassnameProps {
     override var children: Prop<List<View>> = listOf<View>().asProp()
 
     //<editor-fold desc="properties">
