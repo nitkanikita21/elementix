@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
+
 plugins {
     kotlin("multiplatform") version "1.9.0"
 }
@@ -13,19 +15,19 @@ kotlin {
     js {
         binaries.executable()
         browser {
-            /*commonWebpackConfig {
+            commonWebpackConfig {
                 cssSupport {
                     enabled.set(true)
                 }
-            }*/
+            }
         }
     }
     sourceSets {
         val jsMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-html-js:0.9.1")
                 implementation(project(":elementix_reactivity"))
             }
+
         }
         val jsTest by getting {
             dependencies {
@@ -33,4 +35,8 @@ kotlin {
             }
         }
     }
+}
+
+tasks.withType(KotlinWebpack::class.java).forEach { t ->
+    t.inputs.files(fileTree("src/jsMain/resources"))
 }

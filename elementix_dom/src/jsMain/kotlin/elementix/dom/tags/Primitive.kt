@@ -6,6 +6,7 @@ import elementix.dom.StaticProp
 import elementix.dom.asProp
 import elementix.dom.view.Component
 import elementix.dom.view.Container
+import elementix.dom.view.View
 import elementix.reactivity.Context
 import elementix.reactivity.primitives.ReadSignal
 import org.w3c.dom.*
@@ -19,14 +20,22 @@ internal interface EffectCreator {
     fun initEffects(cx: Context)
 }
 
+interface ClassProps {
+    var className: Prop<String>
+
+    fun className(vararg classes: String) {
+        className = StaticProp(classes.joinToString(" "))
+    }
+}
+
 open class DefaultElementProps<E : Element>(
     protected val element: E,
-) : EffectCreator, Props {
-    override var children: Prop<List<Container>> = listOf<Container>().asProp()
+) : EffectCreator, Props, ClassProps {
+    override var children: Prop<List<View>> = listOf<View>().asProp()
 
     //<editor-fold desc="properties">
     open var id: Prop<String> = StaticProp(element.id)
-    open var className: Prop<String> = StaticProp(element.className)
+    override var className: Prop<String> = StaticProp(element.className)
     open var slot: Prop<String> = StaticProp(element.slot)
     open var scrollTop: Prop<Double> = StaticProp(element.scrollTop)
     open var scrollLeft: Prop<Double> = StaticProp(element.scrollLeft)
