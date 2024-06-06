@@ -40,9 +40,9 @@ renderApp(document.getElementById("root")!!) { // Create an App in the root elem
         +clickText // We add the reactive text as a text node to the element
         props.onClick = { e: MouseEvent ->
             if (!e.shiftKey) {
-                count(count() + 1)
+                count { it + 1 }
             } else {
-                count(count() - 1)
+                count { it - 1 }
             }
         }.staticProp //`Any#staticProp` Turns anything into a Static Prop
     }
