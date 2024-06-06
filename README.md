@@ -1,7 +1,6 @@
 # 📦 Elementix
 
-A web microframework built on Kotlin to build web applications using Kotlin. Developed from scratch without the use of
-third-party libraries
+A web microframework built on Kotlin for building web applications using Kotlin. Developed with minimal external libraries
 
 ## 🎯 Goal
 
