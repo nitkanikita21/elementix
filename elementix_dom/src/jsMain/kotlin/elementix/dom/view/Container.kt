@@ -18,3 +18,5 @@ interface Container: View {
         appendChild(Text(this))
     }
 }
+
+operator fun <C: Container> C.invoke(scope: C.() -> Unit) = this.apply(scope)

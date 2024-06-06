@@ -15,7 +15,7 @@ class Trigger internal constructor(
     }
 
     fun fire() {
-        Context.triggerSubscribers[id]?.forEach(Context::runEffect)
+        Context.triggerSubscribers[id]?.toList()?.forEach(Context::runEffect)
     }
 
     override fun destroy() {

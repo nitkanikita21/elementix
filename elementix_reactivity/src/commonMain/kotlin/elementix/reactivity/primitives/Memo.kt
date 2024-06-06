@@ -10,22 +10,18 @@ class Memo<T: Comparable<T>> internal constructor(
     private var prevValue: T? = null
     private lateinit var id: SignalId
 
-    init {
-        Context.createEffect {
-            //context.memoValues[id.value] = computation(prevValue)
-            val newValue = computation(prevValue)
-            if (newValue != prevValue) {
-                if (!(::id.isInitialized)) {
-                    id = Context.nextSignalId()
-                } else {
-                    Context.signalSubscribers[id]?.forEach(Context::runEffect)
-                }
-                Context.signalValues[id] = newValue as Any
-                prevValue = newValue
-            }
+    private val effectDisposable: Disposable = Context.createEffect {
+        //context.memoValues[id.value] = computation(prevValue)
+        if (id == null) {
+            id = Context.nextSignalId()
+        }
+        val newValue = computation(prevValue)
+        if (newValue != prevValue) {
+            Context.signalValues[id!!] = newValue as Any
+            Context.signalSubscribers[id]?.toList()?.forEach(Context::runEffect)
+            prevValue = newValue
         }
     }
-
     @Suppress("UNCHECKED_CAST")
     override fun get(): T {
         val value = Context.signalValues[id] as T

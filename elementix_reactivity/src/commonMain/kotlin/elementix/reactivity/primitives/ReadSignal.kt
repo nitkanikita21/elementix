@@ -1,7 +1,7 @@
 package elementix.reactivity.primitives
 
-fun interface ReadSignal<out T> {
+fun interface ReadSignal<T> {
     fun get(): T
+    fun getUntracked(): T = get()
     operator fun invoke() = get()
 }
-

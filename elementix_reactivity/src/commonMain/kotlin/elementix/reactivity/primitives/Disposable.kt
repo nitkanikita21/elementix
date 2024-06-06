@@ -1,5 +1,5 @@
 package elementix.reactivity.primitives
 
-sealed interface Disposable {
+fun interface Disposable {
     fun destroy()
 }

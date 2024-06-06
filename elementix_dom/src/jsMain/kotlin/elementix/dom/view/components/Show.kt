@@ -52,7 +52,7 @@ class Show(
                     renderChildren(fragment)
                     parent.insertBefore(fragment, anchorEnd)
                 }
-                console.log("rerender")
+                console.log("show rerender")
 
             }
         }
