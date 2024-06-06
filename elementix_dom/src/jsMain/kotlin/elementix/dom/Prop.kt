@@ -23,9 +23,9 @@ class ReactiveProp<T>(private val dataSignal: ReadSignal<T>) : Prop<T> {
     override val data: T get() = dataSignal()
 }
 
-fun <T> T.asProp() = StaticProp(this)
-fun <T> ReadSignal<T>.toProp() = ReactiveProp(this)
+val <T> T.staticProp get() = StaticProp(this)
+val <T> ReadSignal<T>.reactiveProp get() = ReactiveProp(this)
 
-fun <T, R> ReadSignal<T>.toProp(mapper: (T) -> R) = ReactiveProp {
+fun <T, R> ReadSignal<T>.reactiveProp(mapper: (T) -> R) = ReactiveProp {
     return@ReactiveProp mapper(this())
 }

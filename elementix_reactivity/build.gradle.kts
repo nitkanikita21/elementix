@@ -1,5 +1,7 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
+
 plugins {
-    kotlin("multiplatform") version "1.9.0"
+    kotlin("multiplatform")
 }
 
 group = "org.example"
@@ -12,7 +14,12 @@ repositories {
 kotlin {
     js {
         binaries.executable()
-        browser {}
+        browser {
+            webpackTask(Action {
+                output.libraryTarget = "commonjs2"
+                devtool = "inline-source-map"
+            })
+        }
     }
     jvm()
     sourceSets {

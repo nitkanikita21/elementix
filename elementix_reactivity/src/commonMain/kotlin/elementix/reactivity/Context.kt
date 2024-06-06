@@ -1,5 +1,6 @@
 package elementix.reactivity
 
+import elementix.reactivity.primitives.Disposable
 import elementix.reactivity.primitives.Memo
 import elementix.reactivity.primitives.Signal
 import elementix.reactivity.primitives.Trigger
@@ -32,22 +33,36 @@ object Context {
         return Trigger(id)
     }
 
-    fun createEffect(effect: Effect) {
+    fun createEffect(effect: Effect): Disposable {
         val id = nextEffectId()
         effects[id] = effect
         runEffect(id)
+        return Disposable {
+            signalSubscribers.forEach { (_, set) ->
+                set.remove(id)
+            }
+            triggerSubscribers.forEach { (_, set) ->
+                set.remove(id)
+            }
+            effects.remove(id)
+        }
     }
 
     internal fun runEffect(id: EffectId) {
-        val prevRunningEffect = runningEffect?.copy()
+        val prevRunningEffect = runningEffect?.let { EffectId(it.value) }
         runningEffect = id
 
+        //Dont comment this lines
         signalSubscribers.forEach { entry ->
             entry.value.remove(runningEffect)
         }
 
+        //(OLD) Consider whether this piece of code is necessary.
+        //(OLD) It clears the past effect with the same aide, but also clears itself when summoned
+
         effects[id]?.invoke()
         runningEffect = prevRunningEffect
+
     }
 
     //ids

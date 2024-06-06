@@ -4,7 +4,7 @@ import elementix.dom.view.Container
 import elementix.dom.view.View
 import org.w3c.dom.Node
 
-class Root: Container {
+class App: Container {
     private val children: MutableList<View> = mutableListOf()
 
     override fun render(parent: Node) {
@@ -15,3 +15,7 @@ class Root: Container {
         children.addAll(components)
     }
 }
+
+
+fun createApp(initialize: App.() -> Unit = {}): App = App().apply(initialize)
+fun renderApp(parent: Node, initialize: App.() -> Unit = {}) = App().apply(initialize).render(parent)

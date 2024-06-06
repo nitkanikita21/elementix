@@ -3,12 +3,12 @@ package elementix.reactivity.primitives
 import elementix.reactivity.Context
 import elementix.reactivity.SignalId
 
-class Signal<T> internal constructor(
+@Suppress("UNCHECKED_CAST")
+class Signal<T : Any> internal constructor(
     private val id: SignalId
 ): ReadWriteSignal<T>, Disposable {
-    @Suppress("UNCHECKED_CAST")
     override fun get(): T {
-        val value = Context.signalValues[id] as T
+        val value = getUntracked()
 
         Context.runningEffect?.let { effectId ->
             Context.signalSubscribers
@@ -19,9 +19,16 @@ class Signal<T> internal constructor(
         return value
     }
 
+    override fun getUntracked(): T = Context.signalValues.toMap()[id] as T
+
+
     override fun set(value: T) {
-        Context.signalValues[id] = value as Any
-        Context.signalSubscribers[id]?.forEach(Context::runEffect)
+        setUntracked(value)
+        Context.signalSubscribers[id]?.toList()?.forEach(Context::runEffect)
+    }
+
+    override fun setUntracked(value: T) {
+        Context.signalValues[id] = value
     }
 
     override fun destroy() {

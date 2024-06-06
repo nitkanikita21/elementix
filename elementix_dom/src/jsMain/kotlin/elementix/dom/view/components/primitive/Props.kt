@@ -3,7 +3,7 @@ package elementix.dom.view.components.primitive
 import elementix.dom.Prop
 import elementix.dom.Props
 import elementix.dom.StaticProp
-import elementix.dom.asProp
+import elementix.dom.staticProp
 import elementix.dom.view.View
 import elementix.reactivity.Context
 import elementix.reactivity.primitives.ReadSignal
@@ -29,7 +29,7 @@ interface ClassnameProps {
 open class DefaultElementProps<E : Element>(
     protected val element: E,
 ) : EffectCreator, Props, ClassnameProps {
-    override var children: Prop<List<View>> = listOf<View>().asProp()
+    override var children: Prop<List<View>> = StaticProp(listOf<View>())
 
     //<editor-fold desc="properties">
     open var id: Prop<String> = StaticProp(element.id)
@@ -80,7 +80,7 @@ open class DefaultHTMLElementProps<E : HTMLElement>(
     }
 
     fun data(key: String, value: ReadSignal<String>) {
-        dataAttributes.put(key, value)
+        dataAttributes[key] = value
     }
 
     //<editor-fold desc="properties">
@@ -183,6 +183,7 @@ open class DefaultHTMLElementProps<E : HTMLElement>(
     open var onPointerOut: Prop<((PointerEvent) -> dynamic)?> = StaticProp(element.onpointerout)
     open var onPointerEnter: Prop<((PointerEvent) -> dynamic)?> = StaticProp(element.onpointerenter)
     open var onPointerLeave: Prop<((PointerEvent) -> dynamic)?> = StaticProp(element.onpointerleave)
+
     open var onCopy: Prop<((ClipboardEvent) -> dynamic)?> = StaticProp(element.oncopy)
     open var onCut: Prop<((ClipboardEvent) -> dynamic)?> = StaticProp(element.oncut)
     open var onPaste: Prop<((ClipboardEvent) -> dynamic)?> = StaticProp(element.onpaste)
@@ -352,3 +353,4 @@ open class DefaultWindowEventHandlerProps<E : WindowEventHandlers>(
         cx.createEffect { onUnload.ifNotEquals(windowElement.onunload) { windowElement.onunload = it } }
     }
 }
+
