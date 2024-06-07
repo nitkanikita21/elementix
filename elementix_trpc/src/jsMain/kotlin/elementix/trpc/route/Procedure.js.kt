@@ -20,7 +20,7 @@ import kotlinx.serialization.serializer
 import kotlin.js.Promise
 import kotlin.properties.Delegates
 
-actual class Procedure<I : Any, R : Any> {
+actual class Procedure<I : Any?, R : Any?> {
     actual var route: Route by Delegates.notNull()
     actual var name: String by Delegates.notNull()
     actual var validator: Validation<I>? = null
@@ -33,7 +33,7 @@ actual class Procedure<I : Any, R : Any> {
         GlobalScope.promise {
             println("res1")
 
-            val response = HttpClient(Js).post(
+            val response = TRpcClientConfiguration.client.post(
                 URLBuilder(TRpcClientConfiguration.backendUrl).apply {
                     path(TRpcClientConfiguration.pluginConfiguration.endpoint, route.name, name)
                 }.build()
@@ -56,7 +56,7 @@ actual class Procedure<I : Any, R : Any> {
         }
 }
 
-actual inline fun <reified I : Any, reified R : Any> Procedure(
+actual inline fun <reified I : Any?, reified R : Any?> Procedure(
     route: Route,
     name: String,
     validator: Validation<I>?

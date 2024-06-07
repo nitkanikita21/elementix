@@ -4,7 +4,7 @@ import elementix.reactivity.Context
 import elementix.reactivity.SignalId
 
 @Suppress("UNCHECKED_CAST")
-class Signal<T : Any> internal constructor(
+class Signal<T : Any?> internal constructor(
     private val id: SignalId
 ): ReadWriteSignal<T>, Disposable {
     override fun get(): T {

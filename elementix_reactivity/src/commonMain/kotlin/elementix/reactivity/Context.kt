@@ -7,7 +7,7 @@ import elementix.reactivity.primitives.Trigger
 import kotlin.random.Random
 
 object Context {
-    internal val signalValues: MutableMap<SignalId, Any> = hashMapOf()
+    internal val signalValues: MutableMap<SignalId, Any?> = hashMapOf()
     internal var triggerIds: MutableSet<TriggerId> = hashSetOf()
     internal val effects: MutableMap<EffectId, Effect> = hashMapOf()
 
@@ -16,7 +16,7 @@ object Context {
     internal val signalSubscribers: MutableMap<SignalId, MutableSet<EffectId>> = hashMapOf()
     internal val triggerSubscribers: MutableMap<TriggerId, MutableSet<EffectId>> = hashMapOf()
 
-    fun <T : Any> createSignal(value: T): Signal<T> {
+    fun <T : Any?> createSignal(value: T): Signal<T> {
         val id = nextSignalId()
         signalValues.put(id, value)
 

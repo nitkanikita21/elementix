@@ -32,6 +32,7 @@ kotlin {
                 api("io.ktor:ktor-client-content-negotiation:3.0.0-beta-1")
                 implementation(npm("html-webpack-plugin", ">=5.6.0"))
                 implementation(npm("source-map-loader", ">=0.2.4"))
+                implementation(project(":elementix_reactivity"))
             }
 
         }

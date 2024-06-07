@@ -11,7 +11,7 @@ import kotlin.reflect.KType
 import kotlin.reflect.typeOf
 
 
-actual class Procedure<I: Any, R: Any>() {
+actual class Procedure<I: Any?, R: Any?>() {
     actual var route: Route by Delegates.notNull()
     actual var name: String by Delegates.notNull()
     actual var validator: Validation<I>? = null
@@ -28,19 +28,21 @@ actual class Procedure<I: Any, R: Any>() {
     suspend fun getResponse(input: I): Result<Deferred<R>> {
         val validation = validator?.validate(input)
 
-        fun getResult(): Deferred<R> = CoroutineScope(Dispatchers.Default).async {
-            handler(input)
+        val result: Deferred<R> by lazy {
+            CoroutineScope(Dispatchers.Default).async {
+                handler(input)
+            }
         }
 
         return when(validation) {
-            is Valid -> Result.success(getResult())
+            is Valid -> Result.success(result)
             is Invalid -> Result.failure(SerializableValidationError(validation.errors))
-            null -> Result.success(getResult())
+            null -> Result.success(result)
         }
     }
 }
 
-actual inline fun <reified I: Any, reified R: Any> Procedure(
+actual inline fun <reified I: Any?, reified R: Any?> Procedure(
     route: Route,
     name: String,
     validator: Validation<I>?

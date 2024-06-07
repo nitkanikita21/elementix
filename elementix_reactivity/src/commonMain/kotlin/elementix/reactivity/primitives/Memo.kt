@@ -3,12 +3,13 @@ package elementix.reactivity.primitives
 import elementix.reactivity.Context
 import elementix.reactivity.MemoComputation
 import elementix.reactivity.SignalId
+import kotlin.properties.Delegates
 
 class Memo<T: Comparable<T>> internal constructor(
     private val computation: MemoComputation<T>
 ): ReadSignal<T>, Disposable {
     private var prevValue: T? = null
-    private lateinit var id: SignalId
+    private var id: SignalId by Delegates.notNull()
 
     private val effectDisposable: Disposable = Context.createEffect {
         //context.memoValues[id.value] = computation(prevValue)
@@ -38,6 +39,7 @@ class Memo<T: Comparable<T>> internal constructor(
     override fun destroy() {
         Context.signalSubscribers.remove(id)
         Context.signalValues.remove(id)
+        effectDisposable.destroy()
     }
 
 }
