@@ -1,9 +1,8 @@
 package elementix.dom.view.components.primitive
 
-import elementix.dom.Prop
-import elementix.dom.Props
-import elementix.dom.StaticProp
-import elementix.dom.staticProp
+import elementix.dom.Attribute
+import elementix.dom.Attributes
+import elementix.dom.StaticAttribute
 import elementix.dom.view.View
 import elementix.reactivity.Context
 import elementix.reactivity.primitives.ReadSignal
@@ -19,42 +18,42 @@ internal interface EffectCreator {
 }
 
 interface ClassnameProps {
-    var className: Prop<String>
+    var className: Attribute<String>
 
     fun className(vararg classes: String) {
-        className = StaticProp(classes.joinToString(" "))
+        className = StaticAttribute(classes.joinToString(" "))
     }
 }
 
-open class DefaultElementProps<E : Element>(
+open class DefaultElementAttributes<E : Element>(
     protected val element: E,
-) : EffectCreator, Props, ClassnameProps {
-    override var children: Prop<List<View>> = StaticProp(listOf<View>())
+) : EffectCreator, Attributes, ClassnameProps {
+    override var children: Attribute<List<View>> = StaticAttribute(listOf<View>())
 
     //<editor-fold desc="properties">
-    open var id: Prop<String> = StaticProp(element.id)
-    override var className: Prop<String> = StaticProp(element.className)
-    open var slot: Prop<String> = StaticProp(element.slot)
-    open var scrollTop: Prop<Double> = StaticProp(element.scrollTop)
-    open var scrollLeft: Prop<Double> = StaticProp(element.scrollLeft)
-    open var innerHTML: Prop<String> = StaticProp(element.innerHTML)
+    open var id: Attribute<String> = StaticAttribute(element.id)
+    override var className: Attribute<String> = StaticAttribute(element.className)
+    open var slot: Attribute<String> = StaticAttribute(element.slot)
+    open var scrollTop: Attribute<Double> = StaticAttribute(element.scrollTop)
+    open var scrollLeft: Attribute<Double> = StaticAttribute(element.scrollLeft)
+    open var innerHTML: Attribute<String> = StaticAttribute(element.innerHTML)
 //    open var outerHTML: Prop<String> = StaticProp(element.outerHTML)
     //</editor-fold>
 
     //<editor-fold desc="read-only properties">
-    open val namespaceURI: Prop<String?> = StaticProp(element.namespaceURI)
-    open val prefix: Prop<String?> = StaticProp(element.prefix)
-    open val localName: Prop<String> = StaticProp(element.localName)
-    open val tagName: Prop<String> = StaticProp(element.tagName)
-    open val classList: Prop<DOMTokenList> = StaticProp(element.classList)
-    open val attributes: Prop<NamedNodeMap> = StaticProp(element.attributes)
-    open val shadowRoot: Prop<ShadowRoot?> = StaticProp(element.shadowRoot)
-    open val scrollWidth: Prop<Int> = StaticProp(element.scrollWidth)
-    open val scrollHeight: Prop<Int> = StaticProp(element.scrollHeight)
-    open val clientTop: Prop<Int> = StaticProp(element.clientTop)
-    open val clientLeft: Prop<Int> = StaticProp(element.clientLeft)
-    open val clientWidth: Prop<Int> = StaticProp(element.clientWidth)
-    open val clientHeight: Prop<Int> = StaticProp(element.clientHeight)
+    open val namespaceURI: Attribute<String?> = StaticAttribute(element.namespaceURI)
+    open val prefix: Attribute<String?> = StaticAttribute(element.prefix)
+    open val localName: Attribute<String> = StaticAttribute(element.localName)
+    open val tagName: Attribute<String> = StaticAttribute(element.tagName)
+    open val classList: Attribute<DOMTokenList> = StaticAttribute(element.classList)
+    open val attributes: Attribute<NamedNodeMap> = StaticAttribute(element.attributes)
+    open val shadowRoot: Attribute<ShadowRoot?> = StaticAttribute(element.shadowRoot)
+    open val scrollWidth: Attribute<Int> = StaticAttribute(element.scrollWidth)
+    open val scrollHeight: Attribute<Int> = StaticAttribute(element.scrollHeight)
+    open val clientTop: Attribute<Int> = StaticAttribute(element.clientTop)
+    open val clientLeft: Attribute<Int> = StaticAttribute(element.clientLeft)
+    open val clientWidth: Attribute<Int> = StaticAttribute(element.clientWidth)
+    open val clientHeight: Attribute<Int> = StaticAttribute(element.clientHeight)
     //</editor-fold>
 
     override fun initEffects(cx: Context) {
@@ -68,9 +67,9 @@ open class DefaultElementProps<E : Element>(
     }
 }
 
-open class DefaultHTMLElementProps<E : HTMLElement>(
+open class DefaultHTMLElementAttributes<E : HTMLElement>(
     element: E
-) : DefaultElementProps<E>(element) {
+) : DefaultElementAttributes<E>(element) {
     private val dataAttributes: MutableMap<String, ReadSignal<String>> = mutableMapOf()
 
 
@@ -84,109 +83,109 @@ open class DefaultHTMLElementProps<E : HTMLElement>(
     }
 
     //<editor-fold desc="properties">
-    open var title: Prop<String> = StaticProp(element.title)
-    open var lang: Prop<String> = StaticProp(element.lang)
-    open var translate: Prop<Boolean> = StaticProp(element.translate)
-    open var dir: Prop<String> = StaticProp(element.dir)
-    open var hidden: Prop<Boolean> = StaticProp(element.hidden)
-    open var tabIndex: Prop<Int> = StaticProp(element.tabIndex)
-    open var accessKey: Prop<String> = StaticProp(element.accessKey)
-    open var draggable: Prop<Boolean> = StaticProp(element.draggable)
-    open var contextMenu: Prop<HTMLMenuElement?> = StaticProp(element.contextMenu)
-    open var spellcheck: Prop<Boolean> = StaticProp(element.spellcheck)
-    open var innerText: Prop<String> = StaticProp(element.innerText)
-    open var contentEditable: Prop<String> = StaticProp(element.contentEditable)
+    open var title: Attribute<String> = StaticAttribute(element.title)
+    open var lang: Attribute<String> = StaticAttribute(element.lang)
+    open var translate: Attribute<Boolean> = StaticAttribute(element.translate)
+    open var dir: Attribute<String> = StaticAttribute(element.dir)
+    open var hidden: Attribute<Boolean> = StaticAttribute(element.hidden)
+    open var tabIndex: Attribute<Int> = StaticAttribute(element.tabIndex)
+    open var accessKey: Attribute<String> = StaticAttribute(element.accessKey)
+    open var draggable: Attribute<Boolean> = StaticAttribute(element.draggable)
+    open var contextMenu: Attribute<HTMLMenuElement?> = StaticAttribute(element.contextMenu)
+    open var spellcheck: Attribute<Boolean> = StaticAttribute(element.spellcheck)
+    open var innerText: Attribute<String> = StaticAttribute(element.innerText)
+    open var contentEditable: Attribute<String> = StaticAttribute(element.contentEditable)
     //</editor-fold>
 
     //<editor-fold desc="read-only properties">
-    open val style: Prop<CSSStyleDeclaration> = StaticProp(element.style)
-    open val dataset: Prop<DOMStringMap> = StaticProp(element.dataset)
-    open val accessKeyLabel: Prop<String> = StaticProp(element.accessKeyLabel)
-    open val dropzone: Prop<DOMTokenList> = StaticProp(element.dropzone)
-    open val offsetParent: Prop<Element?> = StaticProp(element.offsetParent)
-    open val offsetTop: Prop<Int> = StaticProp(element.offsetTop)
-    open val offsetLeft: Prop<Int> = StaticProp(element.offsetLeft)
-    open val offsetWidth: Prop<Int> = StaticProp(element.offsetWidth)
-    open val offsetHeight: Prop<Int> = StaticProp(element.offsetHeight)
-    open val isContentEditable: Prop<Boolean> = StaticProp(element.isContentEditable)
+    open val style: Attribute<CSSStyleDeclaration> = StaticAttribute(element.style)
+    open val dataset: Attribute<DOMStringMap> = StaticAttribute(element.dataset)
+    open val accessKeyLabel: Attribute<String> = StaticAttribute(element.accessKeyLabel)
+    open val dropzone: Attribute<DOMTokenList> = StaticAttribute(element.dropzone)
+    open val offsetParent: Attribute<Element?> = StaticAttribute(element.offsetParent)
+    open val offsetTop: Attribute<Int> = StaticAttribute(element.offsetTop)
+    open val offsetLeft: Attribute<Int> = StaticAttribute(element.offsetLeft)
+    open val offsetWidth: Attribute<Int> = StaticAttribute(element.offsetWidth)
+    open val offsetHeight: Attribute<Int> = StaticAttribute(element.offsetHeight)
+    open val isContentEditable: Attribute<Boolean> = StaticAttribute(element.isContentEditable)
     //</editor-fold>
 
     //<editor-fold desc="event handlers" defaultstate="collapsed">
-    open var onAbort: Prop<((Event) -> dynamic)?> = StaticProp(element.onabort)
-    open var onBlur: Prop<((FocusEvent) -> dynamic)?> = StaticProp(element.onblur)
-    open var onCancel: Prop<((Event) -> dynamic)?> = StaticProp(element.oncancel)
-    open var onCanPlay: Prop<((Event) -> dynamic)?> = StaticProp(element.oncanplay)
-    open var onCanPlayThrough: Prop<((Event) -> dynamic)?> = StaticProp(element.oncanplaythrough)
-    open var onChange: Prop<((Event) -> dynamic)?> = StaticProp(element.onchange)
-    open var onClick: Prop<((MouseEvent) -> dynamic)?> = StaticProp(element.onclick)
-    open var onClose: Prop<((Event) -> dynamic)?> = StaticProp(element.onclose)
-    open var onContextMenu: Prop<((MouseEvent) -> dynamic)?> = StaticProp(element.oncontextmenu)
-    open var onCueChange: Prop<((Event) -> dynamic)?> = StaticProp(element.oncuechange)
-    open var onDblClick: Prop<((MouseEvent) -> dynamic)?> = StaticProp(element.ondblclick)
-    open var onDrag: Prop<((DragEvent) -> dynamic)?> = StaticProp(element.ondrag)
-    open var onDragEnd: Prop<((DragEvent) -> dynamic)?> = StaticProp(element.ondragend)
-    open var onDragEnter: Prop<((DragEvent) -> dynamic)?> = StaticProp(element.ondragenter)
-    open var onDragExit: Prop<((DragEvent) -> dynamic)?> = StaticProp(element.ondragexit)
-    open var onDragLeave: Prop<((DragEvent) -> dynamic)?> = StaticProp(element.ondragleave)
-    open var onDragOver: Prop<((DragEvent) -> dynamic)?> = StaticProp(element.ondragover)
-    open var onDragStart: Prop<((DragEvent) -> dynamic)?> = StaticProp(element.ondragstart)
-    open var onDrop: Prop<((DragEvent) -> dynamic)?> = StaticProp(element.ondrop)
-    open var onDurationChange: Prop<((Event) -> dynamic)?> = StaticProp(element.ondurationchange)
-    open var onEmptied: Prop<((Event) -> dynamic)?> = StaticProp(element.onemptied)
-    open var onEnded: Prop<((Event) -> dynamic)?> = StaticProp(element.onended)
-    open var onError: Prop<((dynamic, String, Int, Int, Any?) -> dynamic)?> = StaticProp(element.onerror)
-    open var onFocus: Prop<((FocusEvent) -> dynamic)?> = StaticProp(element.onfocus)
-    open var onInput: Prop<((InputEvent) -> dynamic)?> = StaticProp(element.oninput)
-    open var onInvalid: Prop<((Event) -> dynamic)?> = StaticProp(element.oninvalid)
-    open var onKeydown: Prop<((KeyboardEvent) -> dynamic)?> = StaticProp(element.onkeydown)
-    open var onKeypress: Prop<((KeyboardEvent) -> dynamic)?> = StaticProp(element.onkeypress)
-    open var onKeyup: Prop<((KeyboardEvent) -> dynamic)?> = StaticProp(element.onkeyup)
-    open var onLoad: Prop<((Event) -> dynamic)?> = StaticProp(element.onload)
-    open var onLoadedData: Prop<((Event) -> dynamic)?> = StaticProp(element.onloadeddata)
-    open var onLoadedMetadata: Prop<((Event) -> dynamic)?> = StaticProp(element.onloadedmetadata)
-    open var onLoadEnd: Prop<((Event) -> dynamic)?> = StaticProp(element.onloadend)
-    open var onLoadStart: Prop<((ProgressEvent) -> dynamic)?> = StaticProp(element.onloadstart)
-    open var onMouseDown: Prop<((MouseEvent) -> dynamic)?> = StaticProp(element.onmousedown)
-    open var onMouseEnter: Prop<((MouseEvent) -> dynamic)?> = StaticProp(element.onmouseenter)
-    open var onMouseLeave: Prop<((MouseEvent) -> dynamic)?> = StaticProp(element.onmouseleave)
-    open var onMouseMove: Prop<((MouseEvent) -> dynamic)?> = StaticProp(element.onmousemove)
-    open var onMouseOut: Prop<((MouseEvent) -> dynamic)?> = StaticProp(element.onmouseout)
-    open var onMouseOver: Prop<((MouseEvent) -> dynamic)?> = StaticProp(element.onmouseover)
-    open var onMouseUp: Prop<((MouseEvent) -> dynamic)?> = StaticProp(element.onmouseup)
-    open var onWheel: Prop<((WheelEvent) -> dynamic)?> = StaticProp(element.onwheel)
-    open var onPause: Prop<((Event) -> dynamic)?> = StaticProp(element.onpause)
-    open var onPlay: Prop<((Event) -> dynamic)?> = StaticProp(element.onplay)
-    open var onPlaying: Prop<((Event) -> dynamic)?> = StaticProp(element.onplaying)
-    open var onProgress: Prop<((ProgressEvent) -> dynamic)?> = StaticProp(element.onprogress)
-    open var onRateChange: Prop<((Event) -> dynamic)?> = StaticProp(element.onratechange)
-    open var onReset: Prop<((Event) -> dynamic)?> = StaticProp(element.onreset)
-    open var onResize: Prop<((Event) -> dynamic)?> = StaticProp(element.onresize)
-    open var onScroll: Prop<((Event) -> dynamic)?> = StaticProp(element.onscroll)
-    open var onSeeked: Prop<((Event) -> dynamic)?> = StaticProp(element.onseeked)
-    open var onSeeking: Prop<((Event) -> dynamic)?> = StaticProp(element.onseeking)
-    open var onSelect: Prop<((Event) -> dynamic)?> = StaticProp(element.onselect)
-    open var onShow: Prop<((Event) -> dynamic)?> = StaticProp(element.onshow)
-    open var onStalled: Prop<((Event) -> dynamic)?> = StaticProp(element.onstalled)
-    open var onSubmit: Prop<((Event) -> dynamic)?> = StaticProp(element.onsubmit)
-    open var onSuspend: Prop<((Event) -> dynamic)?> = StaticProp(element.onsuspend)
-    open var onTimeUpdate: Prop<((Event) -> dynamic)?> = StaticProp(element.ontimeupdate)
-    open var onToggle: Prop<((Event) -> dynamic)?> = StaticProp(element.ontoggle)
-    open var onVolumeChange: Prop<((Event) -> dynamic)?> = StaticProp(element.onvolumechange)
-    open var onWaiting: Prop<((Event) -> dynamic)?> = StaticProp(element.onwaiting)
-    open var onGotPointerCapture: Prop<((PointerEvent) -> dynamic)?> = StaticProp(element.ongotpointercapture)
-    open var onLostPointerCapture: Prop<((PointerEvent) -> dynamic)?> = StaticProp(element.onlostpointercapture)
-    open var onPointerDown: Prop<((PointerEvent) -> dynamic)?> = StaticProp(element.onpointerdown)
-    open var onPointerMove: Prop<((PointerEvent) -> dynamic)?> = StaticProp(element.onpointermove)
-    open var onPointerUp: Prop<((PointerEvent) -> dynamic)?> = StaticProp(element.onpointerup)
-    open var onPointerCancel: Prop<((PointerEvent) -> dynamic)?> = StaticProp(element.onpointercancel)
-    open var onPointerOver: Prop<((PointerEvent) -> dynamic)?> = StaticProp(element.onpointerover)
-    open var onPointerOut: Prop<((PointerEvent) -> dynamic)?> = StaticProp(element.onpointerout)
-    open var onPointerEnter: Prop<((PointerEvent) -> dynamic)?> = StaticProp(element.onpointerenter)
-    open var onPointerLeave: Prop<((PointerEvent) -> dynamic)?> = StaticProp(element.onpointerleave)
+    open var onAbort: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onabort)
+    open var onBlur: Attribute<((FocusEvent) -> dynamic)?> = StaticAttribute(element.onblur)
+    open var onCancel: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.oncancel)
+    open var onCanPlay: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.oncanplay)
+    open var onCanPlayThrough: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.oncanplaythrough)
+    open var onChange: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onchange)
+    open var onClick: Attribute<((MouseEvent) -> dynamic)?> = StaticAttribute(element.onclick)
+    open var onClose: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onclose)
+    open var onContextMenu: Attribute<((MouseEvent) -> dynamic)?> = StaticAttribute(element.oncontextmenu)
+    open var onCueChange: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.oncuechange)
+    open var onDblClick: Attribute<((MouseEvent) -> dynamic)?> = StaticAttribute(element.ondblclick)
+    open var onDrag: Attribute<((DragEvent) -> dynamic)?> = StaticAttribute(element.ondrag)
+    open var onDragEnd: Attribute<((DragEvent) -> dynamic)?> = StaticAttribute(element.ondragend)
+    open var onDragEnter: Attribute<((DragEvent) -> dynamic)?> = StaticAttribute(element.ondragenter)
+    open var onDragExit: Attribute<((DragEvent) -> dynamic)?> = StaticAttribute(element.ondragexit)
+    open var onDragLeave: Attribute<((DragEvent) -> dynamic)?> = StaticAttribute(element.ondragleave)
+    open var onDragOver: Attribute<((DragEvent) -> dynamic)?> = StaticAttribute(element.ondragover)
+    open var onDragStart: Attribute<((DragEvent) -> dynamic)?> = StaticAttribute(element.ondragstart)
+    open var onDrop: Attribute<((DragEvent) -> dynamic)?> = StaticAttribute(element.ondrop)
+    open var onDurationChange: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.ondurationchange)
+    open var onEmptied: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onemptied)
+    open var onEnded: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onended)
+    open var onError: Attribute<((dynamic, String, Int, Int, Any?) -> dynamic)?> = StaticAttribute(element.onerror)
+    open var onFocus: Attribute<((FocusEvent) -> dynamic)?> = StaticAttribute(element.onfocus)
+    open var onInput: Attribute<((InputEvent) -> dynamic)?> = StaticAttribute(element.oninput)
+    open var onInvalid: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.oninvalid)
+    open var onKeydown: Attribute<((KeyboardEvent) -> dynamic)?> = StaticAttribute(element.onkeydown)
+    open var onKeypress: Attribute<((KeyboardEvent) -> dynamic)?> = StaticAttribute(element.onkeypress)
+    open var onKeyup: Attribute<((KeyboardEvent) -> dynamic)?> = StaticAttribute(element.onkeyup)
+    open var onLoad: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onload)
+    open var onLoadedData: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onloadeddata)
+    open var onLoadedMetadata: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onloadedmetadata)
+    open var onLoadEnd: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onloadend)
+    open var onLoadStart: Attribute<((ProgressEvent) -> dynamic)?> = StaticAttribute(element.onloadstart)
+    open var onMouseDown: Attribute<((MouseEvent) -> dynamic)?> = StaticAttribute(element.onmousedown)
+    open var onMouseEnter: Attribute<((MouseEvent) -> dynamic)?> = StaticAttribute(element.onmouseenter)
+    open var onMouseLeave: Attribute<((MouseEvent) -> dynamic)?> = StaticAttribute(element.onmouseleave)
+    open var onMouseMove: Attribute<((MouseEvent) -> dynamic)?> = StaticAttribute(element.onmousemove)
+    open var onMouseOut: Attribute<((MouseEvent) -> dynamic)?> = StaticAttribute(element.onmouseout)
+    open var onMouseOver: Attribute<((MouseEvent) -> dynamic)?> = StaticAttribute(element.onmouseover)
+    open var onMouseUp: Attribute<((MouseEvent) -> dynamic)?> = StaticAttribute(element.onmouseup)
+    open var onWheel: Attribute<((WheelEvent) -> dynamic)?> = StaticAttribute(element.onwheel)
+    open var onPause: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onpause)
+    open var onPlay: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onplay)
+    open var onPlaying: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onplaying)
+    open var onProgress: Attribute<((ProgressEvent) -> dynamic)?> = StaticAttribute(element.onprogress)
+    open var onRateChange: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onratechange)
+    open var onReset: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onreset)
+    open var onResize: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onresize)
+    open var onScroll: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onscroll)
+    open var onSeeked: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onseeked)
+    open var onSeeking: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onseeking)
+    open var onSelect: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onselect)
+    open var onShow: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onshow)
+    open var onStalled: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onstalled)
+    open var onSubmit: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onsubmit)
+    open var onSuspend: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onsuspend)
+    open var onTimeUpdate: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.ontimeupdate)
+    open var onToggle: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.ontoggle)
+    open var onVolumeChange: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onvolumechange)
+    open var onWaiting: Attribute<((Event) -> dynamic)?> = StaticAttribute(element.onwaiting)
+    open var onGotPointerCapture: Attribute<((PointerEvent) -> dynamic)?> = StaticAttribute(element.ongotpointercapture)
+    open var onLostPointerCapture: Attribute<((PointerEvent) -> dynamic)?> = StaticAttribute(element.onlostpointercapture)
+    open var onPointerDown: Attribute<((PointerEvent) -> dynamic)?> = StaticAttribute(element.onpointerdown)
+    open var onPointerMove: Attribute<((PointerEvent) -> dynamic)?> = StaticAttribute(element.onpointermove)
+    open var onPointerUp: Attribute<((PointerEvent) -> dynamic)?> = StaticAttribute(element.onpointerup)
+    open var onPointerCancel: Attribute<((PointerEvent) -> dynamic)?> = StaticAttribute(element.onpointercancel)
+    open var onPointerOver: Attribute<((PointerEvent) -> dynamic)?> = StaticAttribute(element.onpointerover)
+    open var onPointerOut: Attribute<((PointerEvent) -> dynamic)?> = StaticAttribute(element.onpointerout)
+    open var onPointerEnter: Attribute<((PointerEvent) -> dynamic)?> = StaticAttribute(element.onpointerenter)
+    open var onPointerLeave: Attribute<((PointerEvent) -> dynamic)?> = StaticAttribute(element.onpointerleave)
 
-    open var onCopy: Prop<((ClipboardEvent) -> dynamic)?> = StaticProp(element.oncopy)
-    open var onCut: Prop<((ClipboardEvent) -> dynamic)?> = StaticProp(element.oncut)
-    open var onPaste: Prop<((ClipboardEvent) -> dynamic)?> = StaticProp(element.onpaste)
+    open var onCopy: Attribute<((ClipboardEvent) -> dynamic)?> = StaticAttribute(element.oncopy)
+    open var onCut: Attribute<((ClipboardEvent) -> dynamic)?> = StaticAttribute(element.oncut)
+    open var onPaste: Attribute<((ClipboardEvent) -> dynamic)?> = StaticAttribute(element.onpaste)
     //</editor-fold>
 
     override fun initEffects(cx: Context) {
@@ -297,25 +296,25 @@ open class DefaultHTMLElementProps<E : HTMLElement>(
     }
 }
 
-open class DefaultWindowEventHandlerProps<E : WindowEventHandlers>(
+open class DefaultWindowEventHandlerAttributes<E : WindowEventHandlers>(
     protected val windowElement: E
-) : DefaultHTMLElementProps<HTMLElement>(windowElement as HTMLElement) {
-    open var onAfterPrint: Prop<((Event) -> dynamic)?> = StaticProp(windowElement.onafterprint)
-    open var onBeforePrint: Prop<((Event) -> dynamic)?> = StaticProp(windowElement.onbeforeprint)
-    open var onBeforeUnload: Prop<((BeforeUnloadEvent) -> String?)?> = StaticProp(windowElement.onbeforeunload)
-    open var onHashChange: Prop<((HashChangeEvent) -> dynamic)?> = StaticProp(windowElement.onhashchange)
-    open var onLanguageChange: Prop<((Event) -> dynamic)?> = StaticProp(windowElement.onlanguagechange)
-    open var onMessage: Prop<((MessageEvent) -> dynamic)?> = StaticProp(windowElement.onmessage)
-    open var onOffline: Prop<((Event) -> dynamic)?> = StaticProp(windowElement.onoffline)
-    open var onOnline: Prop<((Event) -> dynamic)?> = StaticProp(windowElement.ononline)
-    open var onPageHide: Prop<((PageTransitionEvent) -> dynamic)?> = StaticProp(windowElement.onpagehide)
-    open var onPageShow: Prop<((PageTransitionEvent) -> dynamic)?> = StaticProp(windowElement.onpageshow)
-    open var onPopState: Prop<((PopStateEvent) -> dynamic)?> = StaticProp(windowElement.onpopstate)
-    open var onRejectionHandled: Prop<((Event) -> dynamic)?> = StaticProp(windowElement.onrejectionhandled)
-    open var onStorage: Prop<((StorageEvent) -> dynamic)?> = StaticProp(windowElement.onstorage)
-    open var onUnhandledRejection: Prop<((PromiseRejectionEvent) -> dynamic)?> =
-        StaticProp(windowElement.onunhandledrejection)
-    open var onUnload: Prop<((Event) -> dynamic)?> = StaticProp(windowElement.onunload)
+) : DefaultHTMLElementAttributes<HTMLElement>(windowElement as HTMLElement) {
+    open var onAfterPrint: Attribute<((Event) -> dynamic)?> = StaticAttribute(windowElement.onafterprint)
+    open var onBeforePrint: Attribute<((Event) -> dynamic)?> = StaticAttribute(windowElement.onbeforeprint)
+    open var onBeforeUnload: Attribute<((BeforeUnloadEvent) -> String?)?> = StaticAttribute(windowElement.onbeforeunload)
+    open var onHashChange: Attribute<((HashChangeEvent) -> dynamic)?> = StaticAttribute(windowElement.onhashchange)
+    open var onLanguageChange: Attribute<((Event) -> dynamic)?> = StaticAttribute(windowElement.onlanguagechange)
+    open var onMessage: Attribute<((MessageEvent) -> dynamic)?> = StaticAttribute(windowElement.onmessage)
+    open var onOffline: Attribute<((Event) -> dynamic)?> = StaticAttribute(windowElement.onoffline)
+    open var onOnline: Attribute<((Event) -> dynamic)?> = StaticAttribute(windowElement.ononline)
+    open var onPageHide: Attribute<((PageTransitionEvent) -> dynamic)?> = StaticAttribute(windowElement.onpagehide)
+    open var onPageShow: Attribute<((PageTransitionEvent) -> dynamic)?> = StaticAttribute(windowElement.onpageshow)
+    open var onPopState: Attribute<((PopStateEvent) -> dynamic)?> = StaticAttribute(windowElement.onpopstate)
+    open var onRejectionHandled: Attribute<((Event) -> dynamic)?> = StaticAttribute(windowElement.onrejectionhandled)
+    open var onStorage: Attribute<((StorageEvent) -> dynamic)?> = StaticAttribute(windowElement.onstorage)
+    open var onUnhandledRejection: Attribute<((PromiseRejectionEvent) -> dynamic)?> =
+        StaticAttribute(windowElement.onunhandledrejection)
+    open var onUnload: Attribute<((Event) -> dynamic)?> = StaticAttribute(windowElement.onunload)
 
     override fun initEffects(cx: Context) {
         super.initEffects(cx)

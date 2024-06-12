@@ -37,3 +37,7 @@ kotlin {
         }*/
     }
 }
+
+dependencies {
+    commonMainApi(project(":elementix_utils"))
+}

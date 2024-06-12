@@ -1,6 +1,6 @@
 package elementix.dom.view
 
-import elementix.dom.view.components.Text
+import elementix.dom.view.components.primitive.Text
 import elementix.reactivity.primitives.ReadSignal
 
 interface Container: View {

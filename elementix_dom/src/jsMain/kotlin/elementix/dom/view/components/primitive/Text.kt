@@ -1,4 +1,4 @@
-package elementix.dom.view.components
+package elementix.dom.view.components.primitive
 
 import elementix.dom.view.View
 import elementix.reactivity.Context

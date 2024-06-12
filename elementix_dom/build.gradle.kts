@@ -33,9 +33,7 @@ kotlin {
 
 dependencies {
     commonMainApi(project(":elementix_reactivity"))
-    commonMainApi(project(":elementix_dom_ksp_processor"))
-    add("kspCommonMainMetadata", project(":elementix_dom_ksp_processor"))
-    add("kspJs", project(":elementix_dom_ksp_processor"))
+    commonMainApi(project(":elementix_utils"))
 }
 
 

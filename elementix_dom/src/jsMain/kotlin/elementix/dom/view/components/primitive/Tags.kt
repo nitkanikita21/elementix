@@ -1,6 +1,6 @@
 package elementix.dom.view.components.primitive
 
-import elementix.dom.staticProp
+import elementix.dom.staticAttribute
 import elementix.dom.view.Component
 import elementix.dom.view.Container
 import elementix.dom.view.View
@@ -9,10 +9,10 @@ import kotlinx.browser.document
 import org.w3c.dom.*
 import kotlin.reflect.KProperty
 
-sealed class ElementComponent<E : HTMLElement, P : DefaultElementProps<E>> : Component<P> {
+sealed class ElementComponent<E : HTMLElement, P : DefaultElementAttributes<E>> : Component<P> {
     abstract val element: E
 
-    class Tag<T : HTMLElement, P : DefaultHTMLElementProps<T>>(
+    class Tag<T : HTMLElement, P : DefaultHTMLElementAttributes<T>>(
         name: String, propsProvider: (T) -> P
     ) : ElementComponent<T, P>(), Container {
 
@@ -29,11 +29,11 @@ sealed class ElementComponent<E : HTMLElement, P : DefaultElementProps<E>> : Com
         }
 
         override fun appendChild(vararg components: View) {
-            props.children = (props.children() + components).staticProp
+            props.children = (props.children() + components).staticAttribute
         }
     }
 
-    class ClosedTag<T : HTMLElement, P : DefaultHTMLElementProps<T>>(
+    class ClosedTag<T : HTMLElement, P : DefaultHTMLElementAttributes<T>>(
         name: String, propsProvider: (T) -> P
     ) : ElementComponent<T, P>() {
         final override val element: T = document.createElement(name) as T
@@ -46,6 +46,10 @@ sealed class ElementComponent<E : HTMLElement, P : DefaultElementProps<E>> : Com
         }
 
     }
+}
+
+fun <P: DefaultElementAttributes<*>> ElementComponent<*, P>.defineAttributes(scope: P.() -> Unit) {
+    props.apply(scope)
 }
 
 /*class Tag<D : View>(private val parent: Container, private val getter: () -> D) {
@@ -66,7 +70,7 @@ fun interface ReadDelegate<T : Any, V> {
 }
 
 
-fun <C : Container, E : HTMLElement, P : DefaultHTMLElementProps<E>> openHtmlElement(
+fun <C : Container, E : HTMLElement, P : DefaultHTMLElementAttributes<E>> openHtmlElement(
     name: String? = null,
     propsProvider: (E) -> P
 ): ReadDelegate<C, ElementComponent.Tag<E, P>> =
@@ -74,7 +78,7 @@ fun <C : Container, E : HTMLElement, P : DefaultHTMLElementProps<E>> openHtmlEle
         ElementComponent.Tag(name ?: property.name, propsProvider).also { thisRef.appendChild(it) }
     }
 
-fun <C : Container, E : HTMLElement, P : DefaultHTMLElementProps<E>> closedHtmlElement(
+fun <C : Container, E : HTMLElement, P : DefaultHTMLElementAttributes<E>> closedHtmlElement(
     name: String? = null,
     propsProvider: (E) -> P
 ): ReadDelegate<C, ElementComponent.ClosedTag<E, P>> =
@@ -82,14 +86,15 @@ fun <C : Container, E : HTMLElement, P : DefaultHTMLElementProps<E>> closedHtmlE
         ElementComponent.ClosedTag(name ?: property.name, propsProvider).also { thisRef.appendChild(it) }
     }
 
-val Container.div by openHtmlElement<Container, HTMLDivElement, DefaultHTMLElementProps<HTMLDivElement>> { DefaultHTMLElementProps(it) }
-val Container.span by openHtmlElement<Container, HTMLSpanElement, DefaultHTMLElementProps<HTMLSpanElement>> { DefaultHTMLElementProps(it) }
-val Container.button by openHtmlElement<Container, HTMLButtonElement, DefaultHTMLElementProps<HTMLButtonElement>> { DefaultHTMLElementProps(it) }
-val Container.h1 by openHtmlElement<Container, HTMLHeadingElement, DefaultHTMLElementProps<HTMLHeadingElement>> { DefaultHTMLElementProps(it) }
-val Container.br by openHtmlElement<Container, HTMLBRElement, DefaultHTMLElementProps<HTMLBRElement>> { DefaultHTMLElementProps(it) }
-val Container.ol by openHtmlElement<Container, HTMLOListElement, DefaultHTMLElementProps<HTMLOListElement>> { DefaultHTMLElementProps(it) }
-val Container.ul by openHtmlElement<Container, HTMLUListElement, DefaultHTMLElementProps<HTMLUListElement>> { DefaultHTMLElementProps(it) }
-val Container.li by openHtmlElement<Container, HTMLLIElement, DefaultHTMLElementProps<HTMLLIElement>> { DefaultHTMLElementProps(it) }
+val Container.div by openHtmlElement<Container, HTMLDivElement, DefaultHTMLElementAttributes<HTMLDivElement>> { DefaultHTMLElementAttributes(it) }
+val Container.span by openHtmlElement<Container, HTMLSpanElement, DefaultHTMLElementAttributes<HTMLSpanElement>> { DefaultHTMLElementAttributes(it) }
+val Container.button by openHtmlElement<Container, HTMLButtonElement, DefaultHTMLElementAttributes<HTMLButtonElement>> { DefaultHTMLElementAttributes(it) }
+val Container.h1 by openHtmlElement<Container, HTMLHeadingElement, DefaultHTMLElementAttributes<HTMLHeadingElement>> { DefaultHTMLElementAttributes(it) }
+val Container.ol by openHtmlElement<Container, HTMLOListElement, DefaultHTMLElementAttributes<HTMLOListElement>> { DefaultHTMLElementAttributes(it) }
+val Container.ul by openHtmlElement<Container, HTMLUListElement, DefaultHTMLElementAttributes<HTMLUListElement>> { DefaultHTMLElementAttributes(it) }
+val Container.li by openHtmlElement<Container, HTMLLIElement, DefaultHTMLElementAttributes<HTMLLIElement>> { DefaultHTMLElementAttributes(it) }
+val Container.br by closedHtmlElement<Container, HTMLBRElement, DefaultHTMLElementAttributes<HTMLBRElement>> { DefaultHTMLElementAttributes(it) }
+val Container.hr by closedHtmlElement<Container, HTMLHRElement, DefaultHTMLElementAttributes<HTMLHRElement>> { DefaultHTMLElementAttributes(it) }
 
 /*
 class Div : ElementComponent.Tag<HTMLDivElement, DefaultHTMLElementProps<HTMLDivElement>>("div", {

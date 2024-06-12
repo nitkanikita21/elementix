@@ -1,4 +1,4 @@
-package elementix.dom.view.components
+package elementix.dom.view.components.meta
 
 import elementix.dom.removeNodesBetweenAnchors
 import elementix.dom.view.Container
@@ -30,8 +30,12 @@ class Show(
     }
 
     private var isRendered = false
+    private var previousState: Boolean? = null
     private val anchorStart = document.createComment("show start")
     private val anchorEnd = document.createComment("show end")
+
+    private val innerInstance = ShowContainer().apply(scope)
+
     override fun render(parent: Node) {
         var fragment: DocumentFragment = document.createDocumentFragment()
         Context.createEffect {
@@ -45,10 +49,11 @@ class Show(
                 isRendered = true
                 console.log("first render", fragment)
             } else {
-                if(!whenSignal()){
+                if(!whenSignal() && (previousState == true || previousState == null)  ){
                     removeNodesBetweenAnchors(parent, anchorStart, anchorEnd)
-                } else {
+                } else if(whenSignal()&& (previousState == false || previousState == null) ) {
                     fragment = document.createDocumentFragment()
+                    removeNodesBetweenAnchors(parent, anchorStart, anchorEnd)
                     renderChildren(fragment)
                     parent.insertBefore(fragment, anchorEnd)
                 }
@@ -59,7 +64,7 @@ class Show(
     }
 
     private fun renderChildren(parent: Node) {
-        ShowContainer().apply(scope).render(parent)
+        innerInstance.render(parent)
     }
 
 

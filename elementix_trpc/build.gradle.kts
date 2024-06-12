@@ -56,6 +56,7 @@ dependencies {
     commonMainApi("org.jetbrains.kotlinx:kotlinx-serialization-core:1.6.3")
     commonMainApi("io.ktor:ktor-serialization-kotlinx-json:3.0.0-beta-1")
     commonMainApi("io.ktor:ktor-client-core:3.0.0-beta-1")
+    commonMainApi(project(":elementix_utils"))
 }
 
 tasks.withType(KotlinWebpack::class.java).forEach { t ->

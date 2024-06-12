@@ -8,7 +8,7 @@ fun removeNodesBetweenAnchors(parent: Node, anchorStart: Node, anchorEnd: Node) 
     val indexStart = list.indexOf(anchorStart)
     val indexEnd = list.indexOf(anchorEnd)
     list.slice((indexStart + 1)..<indexEnd).forEach {
-        console.log("removing", it)
+        console.log("it ", it)
         parent.removeChild(it)
     }
 }
