@@ -1,8 +1,5 @@
 package elementix.dom.view.components.primitive
 
-import elementix.dom.Attribute
-import elementix.dom.Attributes
-import elementix.dom.StaticAttribute
 import elementix.dom.view.View
 import elementix.reactivity.Context
 import elementix.reactivity.primitives.ReadSignal
@@ -17,7 +14,7 @@ internal interface EffectCreator {
     fun initEffects(cx: Context)
 }
 
-interface ClassnameProps {
+interface ClassnameAttributes {
     var className: Attribute<String>
 
     fun className(vararg classes: String) {
@@ -27,7 +24,7 @@ interface ClassnameProps {
 
 open class DefaultElementAttributes<E : Element>(
     protected val element: E,
-) : EffectCreator, Attributes, ClassnameProps {
+) : EffectCreator, Attributes, ClassnameAttributes {
     override var children: Attribute<List<View>> = StaticAttribute(listOf<View>())
 
     //<editor-fold desc="properties">

@@ -1,6 +1,5 @@
 package elementix.dom.view.components.primitive
 
-import elementix.dom.staticAttribute
 import elementix.dom.view.Component
 import elementix.dom.view.Container
 import elementix.dom.view.View

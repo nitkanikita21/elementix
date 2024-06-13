@@ -1,20 +1,40 @@
 # 📦 Elementix
 
-A web microframework built on Kotlin for building web applications using Kotlin. Developed with minimal external libraries
+A web micro-framework built on Kotlin for building web applications using Kotlin. Developed with minimal external
+libraries
 
 ## 🎯 Goal
 
-This project has several goals:
+The goal of this project is to develop a set of systems for developing web applications using the Kotlin programming
+language. This includes systems for reactivity, interface construction, and TRPCs.
 
-1. Investigate the operation of modern web libraries for creating HTML-based client applications
-2. Create and show what a library written in Kotlin for Kotlin could look like to create such applications
-3. To present as my graduate work in a higher educational institution
+## ✨ Features
 
-## 📝 Proof of concept
+### Common
 
-At the moment, there is a proof of concept that demonstrates the operation of the interface, which has a counter and a
-dynamic list, which has the same number of elements as a counter
+#### Reactivity
 
+The implementation of reactive primitives, such as Signal, Memo, Effect, and Trigger, is essential for creating reactive
+code. These primitives play distinct roles in a reactive programming paradigm, enabling efficient and responsive data
+handling within applications.
+
+#### TRPC (Type-safe Remote Procedure Call)
+
+A system that allows you to describe a single type-safe template of "procedures" for the client and the server. Thus,
+you will be sure that your network code of client interaction with the server is 100% valid. There is support for
+information validation using [konform](https://www.konform.io/).
+
+### Frontend
+
+##### Components DSL
+
+Reactive interface description system. Allows you to develop a reactive interface based on html-like syntax. Here is a
+list of possibilities:
+* Description of the dom tree with html tags with the ability to define both static and reactive attributes
+* Utilitarian components `viewFor` for dynamically generating content and `viewShow` for dynamically hiding content
+* Definition of own components with the possibility of using any number of "slots" with content
+
+### This code demonstrates the functionality available
 [Code](elementix_test/src/jsMain/kotlin/Main.kt):
 
 ```kt
@@ -33,7 +53,8 @@ renderApp(document.getElementById("root")!!) { // Create an App in the root elem
         Due to the fact that we cannot directly set the String
         variable to an Int type value, we convert it to the desired
         type using a mapper */
-        props.id = count.map(Any::toString).reactiveProp // `ReadSignal#reactiveProp` converts `ReadSignal` to `ReactiveProp`
+        props.id =
+            count.map(Any::toString).reactiveProp // `ReadSignal#reactiveProp` converts `ReadSignal` to `ReactiveProp`
     }
     button {
         +clickText // We add the reactive text as a text node to the element
@@ -56,7 +77,7 @@ renderApp(document.getElementById("root")!!) { // Create an App in the root elem
     ol {
         viewFor(list) { _, _ -> // `viewFor` generates a list of elements based on a list using a generator function
             li {
-                +count.map { "#".repeat(it)  }
+                +count.map { "#".repeat(it) }
             }
         }
     }
@@ -66,13 +87,14 @@ renderApp(document.getElementById("root")!!) { // Create an App in the root elem
 ## 🧰 Project modules
 
 - [elementix_dom](./elementix_dom) - Virtual DOM
-- [elementix_dom_ksp_processor](./elementix_dom_ksp_processor) - KSP Processor for [elementix_dom](./elementix_dom)
 - [elementix_reactivity](./elementix_reactivity) - System of fine-grained reactivity
-- [elementix_test](./elementix_test) - Test module
 - [elementix_trpc](./elementix_trpc) - Type-safe Remote Procedure Call system
+- [elementix_utils](./elementix_utils) - Utils module
+- [elementix_test](./elementix_test) - Test module
 
 ## 👟 How to launch
 
-Clone and run the project. Call the `gradlew elementix_dom:jsRun` command and wait for the build to complete. After that, your
+Clone and run the project. Call the `gradlew elementix_dom:jsRun` command and wait for the build to complete. After
+that, your
 browser will open with a test page
 

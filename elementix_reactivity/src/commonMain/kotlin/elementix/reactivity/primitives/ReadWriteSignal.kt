@@ -1,6 +1,6 @@
 package elementix.reactivity.primitives
 
-sealed interface ReadWriteSignal<T>: ReadSignal<T>, WriteSignal<T> {
+interface ReadWriteSignal<T>: ReadSignal<T>, WriteSignal<T> {
     fun set(setter: (previous: T) -> T) {
         set(setter(getUntracked()))
     }

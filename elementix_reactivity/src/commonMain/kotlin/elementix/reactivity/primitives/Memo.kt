@@ -3,13 +3,12 @@ package elementix.reactivity.primitives
 import elementix.reactivity.Context
 import elementix.reactivity.MemoComputation
 import elementix.reactivity.SignalId
-import kotlin.properties.Delegates
 
-class Memo<T: Comparable<T>> internal constructor(
+class Memo<T> internal constructor(
     private val computation: MemoComputation<T>
-): ReadSignal<T>, Disposable {
+) : ReadSignal<T>, Disposable {
     private var prevValue: T? = null
-    private var id: SignalId by Delegates.notNull()
+    private var id: SignalId? = null
 
     private val effectDisposable: Disposable = Context.createEffect {
         //context.memoValues[id.value] = computation(prevValue)
@@ -23,13 +22,14 @@ class Memo<T: Comparable<T>> internal constructor(
             prevValue = newValue
         }
     }
+
     @Suppress("UNCHECKED_CAST")
     override fun get(): T {
         val value = Context.signalValues[id] as T
 
         Context.runningEffect?.let { effectId ->
             Context.signalSubscribers
-                .getOrPut(id) { hashSetOf() }
+                .getOrPut(id!!) { hashSetOf() }
                 .add(effectId)
         }
 

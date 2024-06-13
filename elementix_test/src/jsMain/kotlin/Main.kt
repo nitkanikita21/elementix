@@ -1,5 +1,5 @@
-import elementix.dom.reactiveAttribute
-import elementix.dom.staticAttribute
+import elementix.dom.view.components.primitive.reactiveAttribute
+import elementix.dom.view.components.primitive.staticAttribute
 import elementix.dom.view.Container
 import elementix.dom.view.components.custom.defineComponent
 import elementix.dom.view.components.custom.invoke

@@ -18,12 +18,12 @@ object Context {
 
     fun <T : Any?> createSignal(value: T): Signal<T> {
         val id = nextSignalId()
-        signalValues.put(id, value)
+        signalValues[id] = value
 
         return Signal(id)
     }
 
-    fun <T: Comparable<T>> createMemo(computation: MemoComputation<T>): Memo<T> {
+    fun <T> createMemo(computation: MemoComputation<T>): Memo<T> {
         return Memo(computation)
     }
 
