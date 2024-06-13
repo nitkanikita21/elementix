@@ -1,4 +1,4 @@
-package elementix.trpc.builder
+package elementix.utils
 
 class Once<T> {
     private var value: Any = UNINITIALIZED_VALUE

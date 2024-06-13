@@ -1,4 +1,4 @@
-package elementix.dom.view.components
+package elementix.dom.view.components.meta
 
 import elementix.dom.view.Container
 import elementix.dom.view.View

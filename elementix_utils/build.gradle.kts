@@ -24,20 +24,5 @@ kotlin {
     jvm()
     sourceSets {
         val commonMain by getting
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-            }
-        }
-        /*val jsMain by getting {
-            dependencies {
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-emotion:11.9.3-pre.346")
-                implementation("org.jetbrains.kotlinx:kotlinx-html:0.8.1")
-            }
-        }*/
     }
-}
-
-dependencies {
-    commonMainApi(project(":elementix_utils"))
 }

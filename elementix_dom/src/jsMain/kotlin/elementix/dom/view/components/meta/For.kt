@@ -1,10 +1,11 @@
-package elementix.dom.view.components
+package elementix.dom.view.components.meta
 
 import elementix.dom.removeNodesBetweenAnchors
 import elementix.dom.view.Container
 import elementix.dom.view.View
 import elementix.reactivity.Context
 import elementix.reactivity.primitives.ReadSignal
+import elementix.reactivity.primitives.map
 import kotlinx.browser.document
 import org.w3c.dom.DocumentFragment
 import org.w3c.dom.Node
@@ -12,13 +13,16 @@ import org.w3c.dom.Node
 fun <T> Container.viewFor(listSignal: ReadSignal<List<T>>, generator: Container.(index: Int, elem: T) -> Unit) {
     this.appendChild(For(listSignal, generator))
 }
+fun Container.viewFor(countSignal: ReadSignal<Int>, generator: Container.(index: Int) -> Unit) {
+    this.appendChild(For(countSignal.map { List(it) { it } }) { i, _ -> generator(i) })
+}
 
 class For<T>(
     val listSignal: ReadSignal<List<T>>,
     val generator: Container.(index: Int, elem: T) -> Unit
 ) : View {
     inner class ForContainer : Container {
-        private val children: MutableList<View> = mutableListOf()
+        internal val children: MutableList<View> = mutableListOf()
         override fun appendChild(vararg components: View) {
             children.addAll(components)
         }
@@ -32,6 +36,10 @@ class For<T>(
     private var isRendered = false
     private val anchorStart = document.createComment("for start")
     private val anchorEnd = document.createComment("for end")
+
+    private val innerInstance = ForContainer()
+
+
     override fun render(parent: Node) {
         var fragment: DocumentFragment = document.createDocumentFragment()
         Context.createEffect {
@@ -54,12 +62,12 @@ class For<T>(
     }
 
     private fun renderChildren(parent: Node) {
-        val container = ForContainer()
+        innerInstance.children.clear()
         listSignal().forEachIndexed { index, it ->
-            container.generator(index, it)
-            console.log("rendering $index")
+            innerInstance.generator(index, it)
+            console.log()
         }
-        container.render(parent)
+        innerInstance.render(parent)
     }
 
 }

@@ -3,9 +3,11 @@ package elementix.trpc.builder
 import elementix.trpc.route.Procedure
 import elementix.trpc.route.Route
 import elementix.trpc.utils.toKebabCase
+import elementix.utils.GetDelegate
+import elementix.utils.Once
 import io.konform.validation.Validation
 
-inline fun <reified I: Any, reified T: Any> Route.procedure(): GetDelegate<Procedure<I, T>> {
+inline fun <reified I: Any, reified T: Any> Route.procedure(): GetDelegate<Any, Procedure<I, T>> {
     val procedure: Once<Procedure<I, T>> = Once()
 
     return GetDelegate { _, property ->
@@ -17,7 +19,7 @@ inline fun <reified I: Any, reified T: Any> Route.procedure(): GetDelegate<Proce
     }
 }
 
-inline fun <reified I: Any, reified T: Any> Route.procedure(name: String): GetDelegate<Procedure<I, T>> {
+inline fun <reified I: Any, reified T: Any> Route.procedure(name: String): GetDelegate<Any, Procedure<I, T>> {
     val procedure: Once<Procedure<I, T>> = Once()
 
     return GetDelegate { _, _ ->
@@ -29,7 +31,7 @@ inline fun <reified I: Any, reified T: Any> Route.procedure(name: String): GetDe
     }
 }
 
-inline fun <reified I: Any, reified T: Any> Route.procedure(validator: Validation<I>): GetDelegate<Procedure<I, T>> {
+inline fun <reified I: Any, reified T: Any> Route.procedure(validator: Validation<I>): GetDelegate<Any, Procedure<I, T>> {
     val procedure: Once<Procedure<I, T>> = Once()
 
     return GetDelegate { _, property ->
@@ -41,7 +43,7 @@ inline fun <reified I: Any, reified T: Any> Route.procedure(validator: Validatio
     }
 }
 
-inline fun <reified I: Any, reified T: Any> Route.procedure(name: String, validator: Validation<I>): GetDelegate<Procedure<I, T>> {
+inline fun <reified I: Any, reified T: Any> Route.procedure(name: String, validator: Validation<I>): GetDelegate<Any, Procedure<I, T>> {
     val procedure: Once<Procedure<I, T>> = Once()
 
     return GetDelegate { _, _ ->

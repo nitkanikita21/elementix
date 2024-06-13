@@ -1,12 +1,15 @@
-import elementix.dom.reactiveProp
-import elementix.dom.staticProp
+import elementix.dom.reactiveAttribute
+import elementix.dom.staticAttribute
+import elementix.dom.view.Container
+import elementix.dom.view.components.custom.defineComponent
+import elementix.dom.view.components.custom.invoke
+import elementix.dom.view.components.meta.renderApp
+import elementix.dom.view.components.meta.viewFor
 import elementix.dom.view.components.primitive.*
-import elementix.dom.view.components.renderApp
-import elementix.dom.view.components.viewFor
-import elementix.dom.view.components.viewShow
 import elementix.dom.view.invoke
 import elementix.reactivity.Context
 import elementix.reactivity.primitives.ReadSignal
+import elementix.reactivity.primitives.ReadWriteSignal
 import elementix.reactivity.primitives.map
 import elementix.trpc.route.initializeClientConfig
 import io.ktor.http.*
@@ -47,17 +50,22 @@ fun main() {
             Due to the fact that we cannot directly set the String
             variable to an Int type value, we convert it to the desired
             type using a mapper */
-            props.id = count.map(Any::toString).reactiveProp // `ReadSignal#reactiveProp` converts `ReadSignal` to `ReactiveProp`
+            defineAttributes {
+                id = count.map(Any::toString).reactiveAttribute
+                // `ReadSignal#reactiveProp` converts `ReadSignal` to `ReactiveProp`
+            }
         }
         button {
             +clickText // We add the reactive text as a text node to the element
-            props.onClick = { e: MouseEvent ->
-                if (!e.shiftKey) {
-                    count { it + 1 }
-                } else {
-                    count { it - 1 }
-                }
-            }.staticProp //`Any#staticProp` Turns anything into a Static Prop
+            defineAttributes {
+                onClick = { e: MouseEvent ->
+                    if (!e.shiftKey) {
+                        count { it + 1 }
+                    } else {
+                        count { it - 1 }
+                    }
+                }.staticAttribute //`Any#staticProp` Turns anything into a Static Prop
+            }
         }
         div {
             +"TEXT DIV  " // Adds a text node
@@ -70,12 +78,55 @@ fun main() {
         ol {
             viewFor(list) { element, index -> // `viewFor` generates a list of elements based on a list using a generator function
                 li {
-                    +count.map { "#".repeat(it)  }
+                    +count.map { "#".repeat(it) }
                 }
+            }
+        }
+
+        val count = Context.createSignal(0)
+
+        myButton(count)
+
+        h1 {
+            +"NEW"
+        }
+
+        splittedComponent(count) {
+
+            console.log("Default slot")
+            h1 { +"HELLO WORLD" }
+
+            slot("new") {
+                div { +"new slot" }
             }
         }
     }
 
 }
 
+val Container.myButton by defineComponent<ReadWriteSignal<Int>> { counter ->
+    button {
+        defineAttributes {
+            onClick = { event: MouseEvent ->
+                if (event.shiftKey) {
+                    counter { it - 1 }
+                } else {
+                    counter { it + 1 }
+                }
+            }.staticAttribute
+        }
+
+        +counter.map { "Count ${counter()}" }
+    }
+}
+
+val Container.splittedComponent by defineComponent { count ->
+    h1 { +"Default slot" }
+    viewFor(count) {
+        slot()
+        hr
+    }
+    hr
+    slot("new")
+}
 
