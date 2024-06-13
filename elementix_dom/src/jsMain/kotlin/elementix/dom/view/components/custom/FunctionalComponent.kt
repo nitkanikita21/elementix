@@ -7,10 +7,12 @@ import org.w3c.dom.Node
 
 class FunctionalComponent<P>(
     override val props: P,
-    private val slotConstructor: FunctionalComponent<*>.Slot.() -> Unit
-) : Component<P>, Container {
+    private val defaultSlotConstructor: SlotConstructor
+) : Component<P>, Container, SlotsContainerReadOnly, SlotsContainerWriteOnly {
 
-    inner class Slot: Container {
+    inner class Slot(slotsContainerWriteOnly: SlotsContainerWriteOnly) : Container,
+        SlotsContainerWriteOnly by slotsContainerWriteOnly {
+
         private val children: MutableList<View> = mutableListOf()
 
         override fun appendChild(vararg components: View) {
@@ -22,9 +24,12 @@ class FunctionalComponent<P>(
         }
     }
 
+
     private val children: MutableList<View> = mutableListOf()
 
-    val Container.slot get() = Slot().apply(slotConstructor).also { this.appendChild(it) }
+    private val slots: MutableMap<String, SlotConstructor> = mutableMapOf()
+
+//    val Container.slot get() = Slot().apply(defaultSlotConstructor).also { this.appendChild(it) }
 
     override fun appendChild(vararg components: View) {
         children.addAll(components)
@@ -34,4 +39,35 @@ class FunctionalComponent<P>(
         children.forEach { it.render(parent) }
     }
 
+    override fun Container.slot(id: String): Slot {
+        console.log("Getting slot for $id")
+        return Slot(this@FunctionalComponent)
+            .apply(slots[id] ?: {})
+            .also {
+                console.log("Appending slot ${id} to ${this@slot::class.simpleName}")
+                this@slot.appendChild(it)
+            }
+    }
+
+    override fun slot(id: String, constructor: SlotConstructor) {
+        console.log("Setting slot constructor for $id")
+        slots[id] = constructor
+    }
+
+    init {
+        console.log("Initializing default slot")
+        slot("default", defaultSlotConstructor)
+        slot()
+    }
+
+}
+
+typealias SlotConstructor = FunctionalComponent<*>.Slot.() -> Unit
+
+interface SlotsContainerWriteOnly {
+    fun slot(id: String, constructor: SlotConstructor)
+}
+
+interface SlotsContainerReadOnly {
+    fun Container.slot(id: String = "default"): FunctionalComponent<*>.Slot
 }

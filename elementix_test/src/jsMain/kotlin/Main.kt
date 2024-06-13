@@ -92,7 +92,13 @@ fun main() {
         }
 
         splittedComponent(count) {
+
+            console.log("Default slot")
             h1 { +"HELLO WORLD" }
+
+            slot("new") {
+                div { +"new slot" }
+            }
         }
     }
 
@@ -117,8 +123,10 @@ val Container.myButton by defineComponent<ReadWriteSignal<Int>> { counter ->
 val Container.splittedComponent by defineComponent { count ->
     h1 { +"Default slot" }
     viewFor(count) {
-        slot
+        slot()
         hr
     }
+    hr
+    slot("new")
 }
 
