@@ -1,5 +1,4 @@
-import elementix.dom.view.components.primitive.reactiveAttribute
-import elementix.dom.view.components.primitive.staticAttribute
+
 import elementix.dom.view.Container
 import elementix.dom.view.components.custom.defineComponent
 import elementix.dom.view.components.custom.invoke
@@ -51,20 +50,19 @@ fun main() {
             variable to an Int type value, we convert it to the desired
             type using a mapper */
             defineAttributes {
-                id = count.map(Any::toString).reactiveAttribute
-                // `ReadSignal#reactiveProp` converts `ReadSignal` to `ReactiveProp`
+                id bind count.map(Any::toString)
             }
         }
         button {
             +clickText // We add the reactive text as a text node to the element
             defineAttributes {
-                onClick = { e: MouseEvent ->
+                onClick { e: MouseEvent ->
                     if (!e.shiftKey) {
                         count { it + 1 }
                     } else {
                         count { it - 1 }
                     }
-                }.staticAttribute //`Any#staticProp` Turns anything into a Static Prop
+                }
             }
         }
         div {
@@ -107,13 +105,13 @@ fun main() {
 val Container.myButton by defineComponent<ReadWriteSignal<Int>> { counter ->
     button {
         defineAttributes {
-            onClick = { event: MouseEvent ->
+            onClick { event: MouseEvent ->
                 if (event.shiftKey) {
                     counter { it - 1 }
                 } else {
                     counter { it + 1 }
                 }
-            }.staticAttribute
+            }
         }
 
         +counter.map { "Count ${counter()}" }

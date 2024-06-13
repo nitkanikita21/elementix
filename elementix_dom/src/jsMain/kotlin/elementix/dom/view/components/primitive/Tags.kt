@@ -28,7 +28,7 @@ sealed class ElementComponent<E : HTMLElement, P : DefaultElementAttributes<E>> 
         }
 
         override fun appendChild(vararg components: View) {
-            props.children = (props.children() + components).staticAttribute
+            props.children(props.children() + components)
         }
     }
 
